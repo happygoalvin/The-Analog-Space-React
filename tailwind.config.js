@@ -1,7 +1,11 @@
 module.exports = {
-  content: [],
+  content: ["./src/App.js", "./src/pages/Landing.js"],
   theme: {
     extend: {},
   },
-  plugins: [],
-}
+  plugins: [
+    require("@tailwindcss/forms"),
+    require("@tailwindcss/typography"),
+    require("daisyui"),
+  ],
+};
