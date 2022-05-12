@@ -81,7 +81,7 @@ function App() {
                 <span class="font-bold text-lg">8 Items</span>
                 <span class="text-info">Subtotal: $999</span>
                 <div class="card-actions">
-                  <Link class="btn btn-primary btn-sm btn-block" to="/checkout">
+                  <Link class="btn btn-primary btn-sm btn-block hover:shadow-lg hover:shadow-cyan-500/50 transition hover:ease-in-out duration-300" to="/checkout">
                     View cart
                   </Link>
                 </div>
