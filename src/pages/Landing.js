@@ -2,10 +2,11 @@ import React, { useContext, useEffect, useState } from "react";
 import Hero from "../assets/images/hero-image.jpg";
 import { Link } from "react-router-dom";
 import ProductContext from "../context/ProductContext";
+import { FallingLines } from "react-loader-spinner";
 
 export default function Landing() {
   const [productData, setProductData] = useState({});
-  const [hasLoaded, setHasLoaded] = useState(true);
+  const [hasLoaded, setHasLoaded] = useState(false);
   const productCtx = useContext(ProductContext);
 
   useEffect(() => {
@@ -13,9 +14,8 @@ export default function Landing() {
       let newArrival = await productCtx.newArrivals();
       setProductData(newArrival);
     };
-    fetchNewArrival().then(
-      setHasLoaded(true)
-    );
+    fetchNewArrival().then(setHasLoaded(true));
+    // eslint-disable-next-line
   }, []);
 
   return hasLoaded ? (
@@ -71,5 +71,7 @@ export default function Landing() {
         </div>
       </div>
     </React.Fragment>
-  ) : null;
+  ) : (
+    <FallingLines height={100} width={110} color="red" />
+  );
 }
