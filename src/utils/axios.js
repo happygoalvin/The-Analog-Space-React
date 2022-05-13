@@ -5,8 +5,9 @@ const baseUrl = axios.create({
 });
 
 export const apiPath = {
-  landingProducts: "/cameras",
+  newArrivals: "/cameras",
   products: "/cameras/products",
+  viewProduct: "/cameras/products/:cameraId",
   login: "/users/login",
   register: "/users/register",
   profile: "/users/profile",
