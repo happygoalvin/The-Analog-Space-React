@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseUrl = axios.create({
+export const baseUrl = axios.create({
   baseURL: "https://the-analog-space.herokuapp.com/api",
 });
 
@@ -28,4 +28,3 @@ export const getHeaderConfig = (token) => {
   };
 };
 
-export default baseUrl;

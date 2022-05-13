@@ -1,8 +1,9 @@
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import React, { useContext } from "react";
+import { Link } from "react-router-dom";
 
 export default function Navbar() {
   return (
-    <Router>
+    <React.Fragment>
       <nav class="navbar bg-base-100">
         <div class="navbar-start">
           <div class="dropdown">
@@ -101,6 +102,6 @@ export default function Navbar() {
           </div>
         </div>
       </nav>
-    </Router>
+    </React.Fragment>
   );
 }

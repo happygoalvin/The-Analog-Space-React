@@ -1,5 +1,9 @@
 module.exports = {
-  content: ["./src/App.js", "./src/pages/Landing.js"],
+  content: [
+    "./src/App.js",
+    "./src/pages/Landing.js",
+    "./src/components/Navbar.js",
+  ],
   theme: {
     extend: {},
   },

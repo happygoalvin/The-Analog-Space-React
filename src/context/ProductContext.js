@@ -1,12 +1,13 @@
-import { createContext, useState, useEffect } from "react";
+import { createContext } from "react";
 import { baseUrl, apiPath } from "../utils/axios";
 
 const ProductContext = createContext({});
 
-export const ProductProvider = ({ children }) => {
-  const [data, setData] = useState();
-
+const ProductProvider = ({ children }) => {
   const productCall = {
+    testing: () => {
+        console.log("testing");
+    },
     newArrivals: async () => {
       const fetchNewArrivals = await baseUrl.get(apiPath.newArrivals);
       return fetchNewArrivals.response.data
@@ -27,3 +28,5 @@ export const ProductProvider = ({ children }) => {
       </ProductContext.Provider>
   )
 };
+
+export default ProductProvider;
