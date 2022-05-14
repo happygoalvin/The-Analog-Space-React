@@ -7,6 +7,10 @@ export const baseUrl = axios.create({
 export const apiPath = {
   newArrivals: "/cameras",
   products: "/cameras/products",
+  classification: "/cameras/classifications",
+  type: "/cameras/type",
+  manufacturer: "/cameras/manufacturer",
+  film: "/cameras/films",
   viewProduct: "/cameras/products/:cameraId",
   login: "/users/login",
   register: "/users/register",
