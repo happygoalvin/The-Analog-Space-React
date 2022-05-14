@@ -21,7 +21,7 @@ export default function Landing() {
             <h1 className="mb-5 text-5xl font-bold">C A N O N - A E 1</h1>
             <p className="mb-5 text-lg prose">
               The Canon-AE1 is now available in store. Get your hands on this
-              timeless classNameic now.
+              timeless classic now.
             </p>
             <Link to="/products" className="btn btn-primary">
               Shop Now
@@ -61,7 +61,7 @@ export default function Landing() {
                     </p>
                     <Link
                       to="/checkout"
-                      className="btn btn-secondary hover:shadow-xl hover:shadow-cyan-500/50 transition hover:ease-in-out duration-500 hover:scale-110 hover:translate-y-1"
+                      className="btn btn-secondary hover:shadow-xl hover:shadow-cyan-400/60 transition hover:ease-in-out duration-500 hover:scale-110 hover:translate-y-1"
                     >
                       Add to cart
                     </Link>

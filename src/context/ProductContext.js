@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import { createContext } from "react";
+import React, { useState, useEffect, createContext } from "react";
 import { baseUrl, apiPath } from "../utils/axios";
 
 const ProductContext = createContext({});
@@ -16,9 +15,9 @@ export const ProductProvider = ({ children }) => {
       setIsLoading(true);
       let fetchProducts = await baseUrl.get(apiPath.products);
       setProductData(fetchProducts.data);
+      setIsLoading(false);
     };
     fetchData();
-    setIsLoading(false);
   }, []);
 
   useEffect(() => {
@@ -26,9 +25,9 @@ export const ProductProvider = ({ children }) => {
       setIsLoading(true);
       let fetchManufacturer = await baseUrl.get(apiPath.manufacturer);
       setManufacturer(fetchManufacturer.data);
+      setIsLoading(false);
     };
     fetchData();
-    setIsLoading(false);
   }, []);
 
   useEffect(() => {
@@ -36,19 +35,19 @@ export const ProductProvider = ({ children }) => {
       setIsLoading(true);
       let fetchTypes = await baseUrl.get(apiPath.type);
       setType(fetchTypes.data);
+      setIsLoading(false);
     };
     fetchData();
-    setIsLoading(false);
   }, []);
 
   useEffect(() => {
     const fetchData = async () => {
-      setIsLoading(true);
       let fetchNewArrival = await baseUrl.get(apiPath.newArrivals);
+      setIsLoading(true);
       setNewArrivalData(fetchNewArrival.data);
+      setIsLoading(false);
     };
     fetchData();
-    setIsLoading(false);
   }, []);
 
   const landingCall = {
@@ -57,8 +56,6 @@ export const ProductProvider = ({ children }) => {
     type: type,
     isLoading: isLoading,
   };
-
-  
 
   const productCall = {
     products: productData,

@@ -19,7 +19,7 @@ export const apiPath = {
   logout: "/users/logout",
   updatePassword: "/users/update/:userId",
   deleteAccount: "/users/delete/:userId",
-  getAllCartItems: "/cart/:userId",
+  getAllCartItems: "/cart/",
   addCartItem: "/cart/:userId/:cameraId/add",
   removeCartItem: "/cart/:userId/:cameraId/remove",
   updateCartQuantity: "/cart/:userId/cameraId/quantity/update",
