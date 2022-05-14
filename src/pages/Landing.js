@@ -10,7 +10,8 @@ export default function Landing() {
 
   return !landingCall.isLoading ? (
     <React.Fragment>
-      {/****************** HERO SEGMENT START *********************/}
+      <div className="bg-base-100">
+         {/****************** HERO SEGMENT START *********************/}
       <div
         className="hero min-h-screen"
         style={{ backgroundImage: `url(${Hero})` }}
@@ -33,11 +34,11 @@ export default function Landing() {
 
       {/************************* NEW ARRIVAL SECTION START **************************/}
       <h1 className="my-10 text-5xl font-bold text-center">New Arrivals</h1>
-      <div className="carousel carousel-center space-x-10 p-10 bg-stone-900 w-full">
+      <div className="carousel carousel-center space-x-10 p-10 bg-base-300 w-full">
         {landingCall.newArrival.map((newArr) => {
           return (
             <React.Fragment key={newArr.id}>
-              <div className="card w-96 bg-base-100 shadow-xl carousel-item">
+              <div className="card w-96 bg-base-100 shadow-xl carousel-item shadow-orange-400/60">
                 <figure className="max-h-80">
                   <img src={newArr.image_url} alt={newArr.name} />
                 </figure>
@@ -56,22 +57,23 @@ export default function Landing() {
                     {newArr.description}
                   </p>
                   <div className="card-actions justify-end mt-2">
-                    <p className="justify-start text-2xl">
+                    <p className="justify-start text-2xl font-semibold pt-2">
                       ${newArr.cost / 100}
                     </p>
                     <Link
                       to="/checkout"
-                      className="btn btn-secondary hover:shadow-xl hover:shadow-cyan-400/60 transition hover:ease-in-out duration-500 hover:scale-110 hover:translate-y-1"
+                      className="btn btn-secondary hover:shadow-lg hover:shadow-cyan-400/60 transition hover:ease-in-out duration-500 hover:scale-110 hover:translate-y-1"
                     >
                       Add to cart
                     </Link>
                   </div>
                 </div>
               </div>
-              {/************************ NEW ARRIVAL SECTION END  ***************************/}
             </React.Fragment>
           );
         })}
+      </div>
+      {/************************ NEW ARRIVAL SECTION END  ***************************/}
       </div>
     </React.Fragment>
   ) : (
