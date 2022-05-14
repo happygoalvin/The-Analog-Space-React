@@ -7,7 +7,7 @@ export default function Navbar() {
       <nav className="navbar bg-base-100">
         <div className="navbar-start">
           <div className="dropdown">
-            <label tabIndex="0" className="btn btn-ghost btn-circle">
+            <label tabIndex="0" className="btn btn-ghost btn-circle lg:hidden">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-5 w-5"
@@ -38,11 +38,26 @@ export default function Navbar() {
               </li>
             </ul>
           </div>
-        </div>
-        <div className="navbar-center">
           <Link className="btn btn-ghost normal-case text-xl" to="/">
+            <img
+              src={require("../assets/images/brand-logo2.png")}
+              className="w-12 mx-2 btn-circle"
+            ></img>
             The Analog Space
           </Link>
+        </div>
+        <div className="navbar-center hidden lg:flex">
+          <ul className="menu menu-horizontal p-0">
+            <li className="mx-1">
+              <Link to="/">Home</Link>
+            </li>
+            <li className="mx-1">
+              <Link to="/products">Products</Link>
+            </li>
+            <li className="mx-1">
+              <Link to="/contact-us">Contact Us</Link>
+            </li>
+          </ul>
         </div>
         <div className="navbar-end">
           <div className="dropdown dropdown-end">
@@ -84,7 +99,7 @@ export default function Navbar() {
               </div>
             </div>
           </div>
-          <div className="dropdown dropdown-end">
+          <div className="dropdown dropdown-end lg:hidden">
             <label tabIndex="0" className="btn btn-ghost btn-circle avatar">
               <i className="fa-solid fa-circle-user fa-2xl"></i>
             </label>
@@ -92,6 +107,16 @@ export default function Navbar() {
               tabIndex="0"
               className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52 border-2"
             >
+              <li>
+                <Link to="/login">Login</Link>
+              </li>
+              <li>
+                <Link to="/register">Register</Link>
+              </li>
+            </ul>
+          </div>
+          <div className="hidden lg:flex">
+            <ul className="menu menu-horizontal p-3">
               <li>
                 <Link to="/login">Login</Link>
               </li>
