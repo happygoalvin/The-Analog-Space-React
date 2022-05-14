@@ -15,7 +15,7 @@ import React from "react";
 function App() {
   return (
     <>
-      <UserProvider>
+      {/* <UserProvider> */}
         <ProductProvider>
           <Router>
             <Navbar />
@@ -40,7 +40,7 @@ function App() {
             </Routes>
           </Router>
         </ProductProvider>
-      </UserProvider>
+      {/* </UserProvider> */}
     </>
   );
 }
