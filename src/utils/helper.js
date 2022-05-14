@@ -5,3 +5,11 @@ export const getManufacturerName = (state, brandId) => {
     }
   }
 };
+
+export const getTypeName = (state, typeId) => {
+  for (let i = 0; i < state.length; i++) {
+    if (state[i][0] === typeId) {
+      return state[i][1];
+    }
+  }
+};

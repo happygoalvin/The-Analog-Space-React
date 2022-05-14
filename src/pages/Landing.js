@@ -6,10 +6,11 @@ import Loader from "../components/Loader";
 import { getManufacturerName } from "../utils/helper";
 
 export default function Landing() {
-  const [ landingCall,] = useContext(ProductContext);
+  const [landingCall] = useContext(ProductContext);
 
   return !landingCall.isLoading ? (
     <React.Fragment>
+      {/****************** HERO SEGMENT START *********************/}
       <div
         className="hero min-h-screen"
         style={{ backgroundImage: `url(${Hero})` }}
@@ -28,6 +29,9 @@ export default function Landing() {
           </div>
         </div>
       </div>
+      {/****************** HERO SEGMENT END ************************/}
+
+      {/************************* NEW ARRIVAL SECTION START **************************/}
       <h1 className="my-10 text-5xl font-bold text-center">New Arrivals</h1>
       <div className="carousel carousel-center space-x-10 p-10 bg-stone-900 w-full">
         {landingCall.newArrival.map((newArr) => {
@@ -38,22 +42,23 @@ export default function Landing() {
                   <img src={newArr.image_url} alt={newArr.name} />
                 </figure>
                 <div className="card-body bg-slate-900">
-                  <h2 className="card-title">
-                    {newArr.name}
+                  <h2 className="card-title">{newArr.name}</h2>
+                  <div className="card-actions justify-start my-1">
                     <div className="badge badge-primary">
                       {getManufacturerName(
                         landingCall.manufacturer,
                         newArr.manufacturer_id
                       )}
                     </div>
-                  </h2>
+                    <div className="badge badge-outline">35mm Camera</div>
+                  </div>
                   <p className="prose overflow-y-hidden max-h-28">
                     {newArr.description}
                   </p>
-                  <div className="card-actions justify-end mb-2">
-                    <div className="badge badge-outline">35mm Camera</div>
-                  </div>
-                  <div className="card-actions justify-end">
+                  <div className="card-actions justify-end mt-2">
+                    <p className="justify-start text-2xl">
+                      ${newArr.cost / 100}
+                    </p>
                     <Link
                       to="/checkout"
                       className="btn btn-secondary hover:shadow-xl hover:shadow-cyan-500/50 transition hover:ease-in-out duration-500 hover:scale-110 hover:translate-y-1"
@@ -63,6 +68,7 @@ export default function Landing() {
                   </div>
                 </div>
               </div>
+              {/************************ NEW ARRIVAL SECTION END  ***************************/}
             </React.Fragment>
           );
         })}
