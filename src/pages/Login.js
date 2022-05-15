@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import LoginImage from "../assets/images/login-bg.jpg";
 import { baseUrl, apiPath } from "../utils/axios";
 import { regex } from "../validators";
-// import UserContext from "../context/UserContext";
 import { useNavigate, Link } from "react-router-dom";
 
 export default function Login() {
@@ -13,21 +12,22 @@ export default function Login() {
     errorMessageEmail: null,
     errorMessagePassword: "",
     disable: false,
-    invalid: false,
+  });
+  const [invalid, setInvalid] = useState({
+    error: "",
+    display: "hidden",
   });
 
   useEffect(() => {
     if (email === "") {
       setErrorState({
-        errorMessageEmail: "Email must not be empty",
+        errorMessageEmail: "Email is required",
         disable: true,
-        invalid: true,
       });
     } else if (email !== regex.email) {
       setErrorState({
         errorMessageEmail: "Must contain a valid email address",
         disable: true,
-        invalid: true,
       });
     }
 
@@ -35,46 +35,47 @@ export default function Login() {
       setErrorState({
         errorMessageEmail: "",
         disable: false,
-        invalid: false,
       });
     }
   }, [email]);
 
   useEffect(() => {
-    if (password === "") {
+    if (password.match(regex.password)) {
       setErrorState({
-        errorMessagePassword: "Password must not be empty",
+        errorMessagePassword: "",
+        disable: false,
+      });
+    } else if (password === "") {
+      setErrorState({
+        errorMessagePassword: "Password is required",
         disable: true,
-        invalid: true,
       });
     } else if (password !== regex.password) {
       setErrorState({
         errorMessagePassword:
           "Min. 8 chars, at least 1 uppercase, one lowercase and one number",
         disable: true,
-        invalid: true,
-      });
-    }
-
-    if (password.match(regex.password)) {
-      setErrorState({
-        errorMessagePassword: "",
-        disable: false,
-        invalid: false,
       });
     }
   }, [password]);
 
   const loginUser = async () => {
-    let response = await baseUrl.post(apiPath.login, {
-      email: email,
-      password: password,
-    });
+    if (email === "" || password === "") {
+      setInvalid({
+        error: "Invalid email or password",
+        display: "block alert alert-error shadow-lg alert-sm mt-3",
+      });
+    } else {
+      let response = await baseUrl.post(apiPath.login, {
+        email: email,
+        password: password,
+      });
 
-    localStorage.setItem("accessToken", response.data.accessToken);
-    localStorage.setItem("refreshToken", response.data.refreshToken);
+      localStorage.setItem("accessToken", response.data.accessToken);
+      localStorage.setItem("refreshToken", response.data.refreshToken);
 
-    navigate("/profile");
+      navigate("/profile");
+    }
   };
 
   return (
@@ -90,6 +91,24 @@ export default function Login() {
               <div className="bg-zinc-800 px-6 pb-6 pt-3 rounded-lg shadow-lg">
                 <div>
                   <h1 className="text-center text-2xl font-bold pt-2">Login</h1>
+                </div>
+                <div className={invalid.display}>
+                  <div>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="stroke-current flex-shrink-0 h-6 w-6"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                      />
+                    </svg>
+                    <span className="prose font-semibold">{invalid.error}</span>
+                  </div>
                 </div>
                 {/* input start */}
                 {/* email */}
