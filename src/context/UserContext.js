@@ -48,8 +48,9 @@ export const UserProvider = ({ children }) => {
   const updateTokens = async (token) => {
     if (token) {
       let tokenExpiry = jwtDecode(token.accessToken).exp;
+      let tokenExpiryOneMinBefore = tokenExpiry - 1 * 60 * 1000;
       let currentUnixTime = Math.round(new Date().getTime() / 1000);
-      if (currentUnixTime >= tokenExpiry) {
+      if (currentUnixTime >= tokenExpiryOneMinBefore) {
         console.log("Access token has expired. Retrieving new token.");
         setIsLoading(true);
 
