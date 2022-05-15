@@ -166,7 +166,7 @@ export default function Register() {
       });
     } else {
       const { confirm_password, ...registerData } = registerState;
-      await baseUrl.post(apiPath.register, { registerData });
+      await baseUrl.post(apiPath.register, { ...registerData });
       navigate("/login");
     }
   };
