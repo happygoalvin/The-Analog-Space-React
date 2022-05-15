@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import LoginImage from "../assets/images/login-bg.jpg";
 import { baseUrl, apiPath } from "../utils/axios";
 import { regex } from "../validators";
 import { useNavigate, Link } from "react-router-dom";
+import AuthContext from "../context/UserContext";
 
 export default function Login() {
+  const userCtx = useContext(AuthContext); 
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -71,8 +73,17 @@ export default function Login() {
         password: password,
       });
 
-      localStorage.setItem("accessToken", response.data.accessToken);
-      localStorage.setItem("refreshToken", response.data.refreshToken);
+      
+      userCtx.updateTokens(response.data)
+      localStorage.setItem(
+        "tokens",
+        JSON.stringify({
+          accessToken: response.data.accessToken,
+          refreshToken: response.data.refreshToken
+        })
+      );
+
+      console.log(localStorage.getItem("tokens"));
 
       navigate("/profile");
     }

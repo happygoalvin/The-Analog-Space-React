@@ -46,10 +46,10 @@ export default function Landing() {
                     <h2 className="card-title">{newArr.name}</h2>
                     <div className="card-actions justify-start my-1">
                       <div className="badge badge-primary">
-                        {getManufacturerName(
+                        {landingCall.manufacturer ? getManufacturerName(
                           landingCall.manufacturer,
                           newArr.manufacturer_id
-                        )}
+                        ) : ""}
                       </div>
                       <div className="badge badge-outline">35mm Camera</div>
                     </div>

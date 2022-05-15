@@ -1,78 +1,127 @@
-// import { useState, useEffect, createContext } from "react";
-// import { baseUrl, apiPath, getHeaderConfig } from "../utils/axios";
-// import { useParams } from "react-router-dom";
-// import jwtDecode from "jwt-decode";
+import { useState, useEffect, createContext } from "react";
+import { baseUrl, apiPath, getHeaderConfig } from "../utils/axios";
+import jwtDecode from "jwt-decode";
+import axios from "axios";
 
-// const UserContext = createContext({});
+const UserContext = createContext({});
 
-// export const UserProvider = ({ children }) => {
-//   const [user, setUser] = useState({});
-//   const [cart, setCart] = useState({});
-//   const [isLoading, setIsLoading] = useState(false);
-//   const { userId } = useParams;
+export const UserProvider = ({ children }) => {
+  const [authState, setAuthState] = useState({
+    accessToken: "",
+    refreshToken: "",
+  });
+  const [userInfo, setUserInfo] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
 
-  // useEffect(() => {
-  //   console.log("Component mounted for user state");
-  //   const fetchToken = async () => {
-  //     setIsLoading(true);
-  //     let token = localStorage.getItem("accessToken");
-  //     if (token) {
-  //       let tokenExpiry = jwtDecode(token).exp;
-  //       let currentUnixTime = Math.round(new Date().getTime() / 1000);
-  //       if (currentUnixTime >= tokenExpiry) {
-  //         console.log("Access token has expired. retrieving new access token");
-  //         const refreshToken = localStorage.getItem("refreshToken");
-  //         let refreshResponse = await baseUrl.post(apiPath.refreshToken, {
-  //           refreshToken: refreshToken,
-  //         });
-  //         localStorage.setItem("accessToken", refreshResponse.data.accessToken);
-  //         token = refreshResponse.data.accessToken;
-  //       }
-  //     }
-  //     let fetchProfile = await baseUrl.get(
-  //       apiPath.profile,
-  //       getHeaderConfig(token)
-  //     );
-  //     setUser(fetchProfile.data);
-  //     setIsLoading(false);
-  //   };
-  //   fetchToken();
-  // }, []);
+  // check refreshToken expiry and refresh if needed
+  useEffect(() => {
+    const token = JSON.parse(localStorage.getItem("tokens"));
+    if (token.refreshToken) {
+      updateTokens(token);
+    }
+  }, []);
 
-  //   useEffect(() => {
-  //     console.log("Component mounted for cart state");
-  //     const fetchToken = async () => {
-  //       let token = localStorage.getItem("accessToken");
-  //       if (token) {
-  //         let tokenExpiry = jwtDecode(token).exp;
-  //         let currentUnixTime = Math.round(new Date().getTime() / 1000);
-  //         if (currentUnixTime >= tokenExpiry) {
-  //           console.log("Access token has expired. retrieving new access token");
-  //           const refreshToken = localStorage.getItem("refreshToken");
-  //           let refreshResponse = await baseUrl.post(apiPath.refreshToken, {
-  //             refreshToken: refreshToken,
-  //           });
-  //           localStorage.setItem("accessToken", refreshResponse.data.accessToken);
-  //           token = refreshResponse.data.accessToken;
-  //         }
-  //       }
-  //       let fetchCart = await baseUrl.get(
-  //         apiPath.getAllCartItems`${userId}`,
-  //         getHeaderConfig(token)
-  //       );
-  //       setUser(fetchCart.data);
-  //     };
-  //     fetchToken().then(setIsLoading(false));
-  //   });
+  // check token expiry and retrieve profile info if valid
+  useEffect(() => {
+    const getUserInfo = () => {
+      const token = JSON.parse(localStorage.getItem("tokens"));
+      if (token) {
+        updateTokens(token).then(() => {
+          setIsLoading(true);
+          const getUserProfile = baseUrl.get(
+            apiPath.profile,
+            getHeaderConfig(token.accessToken)
+          );
 
-//   const userCall = {
-//     user: user,
-//     cart: cart,
-//   };
+          setUserInfo(getUserProfile.data);
+          setIsLoading(false);
+        });
+      } else {
+        console.log(
+          "refresh token has expired. Please login to retrieve user profile"
+        );
+      }
+    };
+    getUserInfo();
+  }, []);
 
-//   return (
-//     <UserContext.Provider value={userCall}>{children}</UserContext.Provider>
-//   );
-// };
+  const updateTokens = async (token) => {
+    if (token) {
+      let tokenExpiry = jwtDecode(token.accessToken).exp;
+      let currentUnixTime = Math.round(new Date().getTime() / 1000);
+      if (currentUnixTime >= tokenExpiry) {
+        console.log("Access token has expired. Retrieving new token.");
+        setIsLoading(true);
 
-// export default UserContext;
+        const refreshAccess = await baseUrl.post(apiPath.refreshTokens, {
+          refreshToken: token.refreshToken,
+        });
+
+        localStorage.setItem(
+          "tokens",
+          JSON.stringify({
+            accessToken: refreshAccess.data.accessToken,
+            refreshToken: refreshAccess.data.refreshToken,
+          })
+        );
+
+        setAuthState({
+          accessToken: refreshAccess.data.accessToken,
+          refreshToken: refreshAccess.data.refreshToken,
+        });
+
+        setIsLoading(false);
+      } else if (currentUnixTime <= tokenExpiry) {
+        console.log("Access token has not expired");
+        setAuthState({
+          accessToken: token.accessToken,
+          refreshToken: token.refreshToken,
+        });
+      }
+    } else {
+      console.log("refresh token has expired, please re-login");
+    }
+  };
+
+  const logout = async () => {
+    const token = JSON.parse(localStorage.getItem("tokens"));
+    if (token) {
+      setIsLoading(true)
+      await baseUrl.post(apiPath.logout, {
+        refreshToken: token.refreshToken,
+      });
+
+      localStorage.setItem(
+        "tokens",
+        JSON.stringify({
+          accessToken: "",
+          refreshToken: "",
+        })
+      );
+
+      setAuthState({
+        accessToken: "",
+        refreshToken: "",
+      });
+
+      setIsLoading(false);
+      console.log("Logout successful");
+    } else {
+      console.log("Logout unsuccessful");
+    }
+  };
+
+  const userAuth = {
+    getAuth: authState,
+    logout: logout,
+    updateTokens: updateTokens,
+    profile: userInfo,
+    isLoading: isLoading
+  };
+
+  return (
+    <UserContext.Provider value={userAuth}>{children}</UserContext.Provider>
+  );
+};
+
+export default UserContext;

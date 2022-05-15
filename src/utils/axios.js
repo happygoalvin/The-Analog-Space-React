@@ -15,7 +15,7 @@ export const apiPath = {
   login: "/users/login",
   register: "/users/register",
   profile: "/users/profile",
-  refreshToken: "/users/refresh",
+  refreshTokens: "/users/refresh",
   logout: "/users/logout",
   updatePassword: "/users/update/:userId",
   deleteAccount: "/users/delete/:userId",
