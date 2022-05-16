@@ -1,7 +1,6 @@
 import { useState, useEffect, createContext } from "react";
 import { baseUrl, apiPath, getHeaderConfig } from "../utils/axios";
 import jwtDecode from "jwt-decode";
-import axios from "axios";
 
 const UserContext = createContext({});
 
@@ -87,7 +86,7 @@ export const UserProvider = ({ children }) => {
   const logout = async () => {
     const token = JSON.parse(localStorage.getItem("tokens"));
     if (token) {
-      setIsLoading(true)
+      setIsLoading(true);
       await baseUrl.post(apiPath.logout, {
         refreshToken: token.refreshToken,
       });
@@ -117,7 +116,7 @@ export const UserProvider = ({ children }) => {
     logout: logout,
     updateTokens: updateTokens,
     profile: userInfo,
-    isLoading: isLoading
+    isLoading: isLoading,
   };
 
   return (
