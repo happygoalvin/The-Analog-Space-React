@@ -25,15 +25,19 @@ export const UserProvider = ({ children }) => {
     const getUserInfo = () => {
       const token = JSON.parse(localStorage.getItem("tokens"));
       if (token) {
-        updateTokens(token).then(() => {
+        updateTokens(token).then(async () => {
+          console.log("moved onto retrieve profile");
           setIsLoading(true);
-          const getUserProfile = baseUrl.get(
+          console.log("Test retrieval");
+          const getUserProfile = await baseUrl.get(
             apiPath.profile,
             getHeaderConfig(token.accessToken)
           );
+          console.log("retrieved profile");
 
           setUserInfo(getUserProfile.data);
           setIsLoading(false);
+          console.log("profile retrieval end");
         });
       } else {
         console.log(
@@ -46,10 +50,10 @@ export const UserProvider = ({ children }) => {
 
   const updateTokens = async (token) => {
     if (token) {
-      let tokenExpiry = jwtDecode(token.accessToken).exp;
-      let tokenExpiryOneMinBefore = tokenExpiry - 1 * 60 * 1000;
+      let tokenExpiryAccess = jwtDecode(token.accessToken).exp;
+      let tokenExpiryAccessFiveMinBefore = tokenExpiryAccess - 5 * 60 * 1000;
       let currentUnixTime = Math.round(new Date().getTime() / 1000);
-      if (currentUnixTime >= tokenExpiryOneMinBefore) {
+      if (currentUnixTime >= tokenExpiryAccessFiveMinBefore) {
         console.log("Access token has expired. Retrieving new token.");
         setIsLoading(true);
 
@@ -57,6 +61,7 @@ export const UserProvider = ({ children }) => {
           refreshToken: token.refreshToken,
         });
 
+        console.log(refreshAccess.data);
         localStorage.setItem(
           "tokens",
           JSON.stringify({
@@ -69,9 +74,11 @@ export const UserProvider = ({ children }) => {
           accessToken: refreshAccess.data.accessToken,
           refreshToken: refreshAccess.data.refreshToken,
         });
+        console.log("Storing tokens");
 
         setIsLoading(false);
-      } else if (currentUnixTime <= tokenExpiry) {
+        console.log("Token retrieved");
+      } else if (currentUnixTime <= tokenExpiryAccess) {
         console.log("Access token has not expired");
         setAuthState({
           accessToken: token.accessToken,
@@ -79,6 +86,17 @@ export const UserProvider = ({ children }) => {
         });
       }
     } else {
+      setAuthState({
+        accessToken: "",
+        refreshToken: "",
+      });
+      localStorage.setItem(
+        "tokens",
+        JSON.stringify({
+          accessToken: "",
+          refreshToken: "",
+        })
+      );
       console.log("refresh token has expired, please re-login");
     }
   };
@@ -86,6 +104,7 @@ export const UserProvider = ({ children }) => {
   const logout = async () => {
     const token = JSON.parse(localStorage.getItem("tokens"));
     if (token) {
+      console.log("Logout begin");
       setIsLoading(true);
       await baseUrl.post(apiPath.logout, {
         refreshToken: token.refreshToken,
@@ -115,7 +134,7 @@ export const UserProvider = ({ children }) => {
     getAuth: authState,
     logout: logout,
     updateTokens: updateTokens,
-    profile: userInfo,
+    userInfo: userInfo,
     isLoading: isLoading,
   };
 

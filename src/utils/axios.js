@@ -18,7 +18,7 @@ export const apiPath = {
   refreshTokens: "/users/refresh",
   logout: "/users/logout",
   updatePassword: "/users/update",
-  deleteAccount: "/users/delete/",
+  deleteAccount: "/users/delete",
   getAllCartItems: "/cart",
   addCartItem: "/cart/add/:camera_id",
   removeCartItem: "/cart/remove/:camera_id",
