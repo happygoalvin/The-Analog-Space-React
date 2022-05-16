@@ -26,19 +26,20 @@ export const UserProvider = ({ children }) => {
       const token = JSON.parse(localStorage.getItem("tokens"));
       if (token) {
         updateTokens(token).then(async () => {
-          console.log(token);
-          console.log("moved onto retrieve profile");
-          setIsLoading(true);
-          console.log("Test retrieval");
-          const getUserProfile = await baseUrl.get(
-            apiPath.profile,
-            getHeaderConfig(token.accessToken)
-          );
-          console.log("retrieved profile");
+          if (token) {
+            console.log("moved onto retrieve profile");
+            setIsLoading(true);
+            console.log("Test retrieval");
+            const getUserProfile = await baseUrl.get(
+              apiPath.profile,
+              getHeaderConfig(token.accessToken)
+            );
+            console.log("retrieved profile");
 
-          setUserInfo(getUserProfile.data);
-          setIsLoading(false);
-          console.log("profile retrieval end");
+            setUserInfo(getUserProfile.data);
+            setIsLoading(false);
+            console.log("profile retrieval end");
+          }
         });
       } else {
         console.log(
