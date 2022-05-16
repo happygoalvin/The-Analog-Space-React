@@ -14,9 +14,9 @@ export default function Products() {
           <input id="my-drawer-4" type="checkbox" className="drawer-toggle" />
           <div className="drawer-content">
             {/* <!-- Page content here --> */}
-            <div className="flex justify-between">
-              <span className="prose text-slate-300 text-lg text-bold">
-                showing {productCall.products.length} products
+            <div className="flex justify-evenly py-10">
+              <span className="prose text-slate-300 text-md text-semibold">
+                Showing {productCall.products.length} products
               </span>
               <h1 className="text-2xl text-bold">All Products</h1>
               <label htmlFor="my-drawer-4" className="drawer-button">
@@ -38,7 +38,7 @@ export default function Products() {
                 </svg>
               </label>
             </div>
-            <div className="flex justify-evenly flex-wrap mt-24 pt-24">
+            <div className="flex justify-evenly flex-wrap pt-4">
               {productCall.products.map((p) => {
                 return (
                   <React.Fragment key={p.id}>

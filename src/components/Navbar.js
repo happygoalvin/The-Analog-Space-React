@@ -5,7 +5,7 @@ export default function Navbar() {
   return (
     <React.Fragment>
       <nav className="navbar bg-base-100">
-        <div className="navbar-start lg:ml-28">
+        <div className="navbar-start xl:ml-24">
           <div className="dropdown">
             <label tabIndex="0" className="btn btn-ghost btn-circle lg:hidden">
               <svg
@@ -48,13 +48,13 @@ export default function Navbar() {
         </div>
         <div className="navbar-center hidden lg:flex">
           <ul className="menu menu-horizontal p-0">
-            <li className="mx-7">
+            <li className="lg:ml-20 xl:mx-8">
               <Link to="/">Home</Link>
             </li>
-            <li className="mx-1">
+            <li className="lg:mx-1 xl:mx-1">
               <Link to="/products">Products</Link>
             </li>
-            <li className="mx-1">
+            <li className="lg:mx-1 xl:mx-1">
               <Link to="/contact-us">Contact Us</Link>
             </li>
           </ul>
@@ -115,7 +115,7 @@ export default function Navbar() {
               </li>
             </ul>
           </div>
-          <div className="hidden lg:flex lg:ml-4 mr-28">
+          <div className="hidden lg:flex xl:ml-4 xl:mr-28">
             <ul className="menu menu-horizontal p-3">
               <li className="mx-4">
                 <Link to="/login">Login</Link>
