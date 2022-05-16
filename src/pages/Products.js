@@ -1,24 +1,33 @@
 import React, { useContext } from "react";
 import ProductContext from "../context/ProductContext";
 import Loader from "../components/Loader";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { getManufacturerName, getTypeName } from "../utils/helper";
 
 export default function Products() {
+  const navigate = useNavigate();
   const [, productCall] = useContext(ProductContext);
+
+  const viewDetails = (p) => {
+    console.log(p);
+    navigate(`/products/${p}`);
+  };
 
   return !productCall.isLoading ? (
     <React.Fragment>
+      <div className="container mx-auto"> 
       <div className="bg-base-100">
         <div className="drawer drawer-end">
           <input id="my-drawer-4" type="checkbox" className="drawer-toggle" />
           <div className="drawer-content">
             {/* <!-- Page content here --> */}
-            <div className="flex justify-evenly py-10">
+            <div className="flex justify-evenly pt-10 sm:pt-10 lg:pt-10">
               <span className="prose text-slate-300 text-md text-semibold">
                 Showing {productCall.products.length} products
               </span>
-              <h1 className="text-2xl text-bold">All Products</h1>
+              <h1 className="text-2xl text-bold hidden lg:block">
+                All Products
+              </h1>
               <label htmlFor="my-drawer-4" className="drawer-button">
                 <svg
                   version="1.0"
@@ -42,8 +51,8 @@ export default function Products() {
               {productCall.products.map((p) => {
                 return (
                   <React.Fragment key={p.id}>
-                    <div className="card w-96 bg-base-100 shadow-xl shadow-orange-400/60">
-                      <figure className="max-h-80">
+                    <div className="card sm:w-64 md:w-72 lg:w-96 bg-base-100 shadow-xl shadow-orange-400/60 lg:ml-20 mt-10">
+                      <figure className="md:max-h-42 lg:max-h-80">
                         <img src={p.image_url} alt={p.name} />
                       </figure>
                       <div className="card-body bg-slate-900">
@@ -67,15 +76,17 @@ export default function Products() {
                           {p.description}
                         </p>
                         <div className="card-actions justify-end mt-2">
-                          <p className="justify-start text-2xl font-semibold pt-2">
+                          <p className="justify-start text-lg md:text-xl lg:text-2xl font-semibold pt-2">
                             ${p.cost / 100}
                           </p>
-                          <Link
-                            to="/checkout"
-                            className="btn btn-secondary hover:shadow-lg hover:shadow-cyan-400/60 transition hover:ease-in-out duration-500 hover:scale-110 hover:translate-y-1"
+                          <button
+                            onClick={() => {
+                              viewDetails(p.id);
+                            }}
+                            className="btn btn-sm md:btn-md btn-secondary hover:shadow-lg hover:shadow-cyan-400/60 transition hover:ease-in-out duration-500 hover:scale-110 hover:translate-y-1"
                           >
-                            Add to cart
-                          </Link>
+                            View Product
+                          </button>
                         </div>
                       </div>
                     </div>
@@ -97,6 +108,7 @@ export default function Products() {
             </ul>
           </div>
         </div>
+      </div>
       </div>
     </React.Fragment>
   ) : (

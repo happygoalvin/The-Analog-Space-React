@@ -11,7 +11,7 @@ export const apiPath = {
   type: "/cameras/type",
   manufacturer: "/cameras/manufacturer",
   film: "/cameras/films",
-  viewProduct: "/cameras/products/:camera_id",
+  viewProduct: "/cameras/products/",
   login: "/users/login",
   register: "/users/register",
   profile: "/users/profile",

@@ -38,17 +38,17 @@ export default function Navbar() {
               </li>
             </ul>
           </div>
-          <Link className="btn btn-ghost normal-case text-xl" to="/">
+          <Link className="btn btn-ghost normal-case text-sm md:text-xl" to="/">
             <img
               src={require("../assets/images/brand-logo2.png")}
-              className="w-12 mx-2 btn-circle"
+              className="w-6 h-6 sm:w-12 sm:h-12 mx-2 btn-circle"
             ></img>
             The Analog Space
           </Link>
         </div>
         <div className="navbar-center hidden lg:flex">
           <ul className="menu menu-horizontal p-0">
-            <li className="lg:ml-20 xl:mx-8">
+            <li className="lg:ml-20 xl:ml-12">
               <Link to="/">Home</Link>
             </li>
             <li className="lg:mx-1 xl:mx-1">
