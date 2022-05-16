@@ -9,7 +9,6 @@ export default function Products() {
   const [, productCall] = useContext(ProductContext);
 
   const viewDetails = (p) => {
-    console.log(p);
     navigate(`/products/${p}`);
   };
 
@@ -47,6 +46,7 @@ export default function Products() {
                 </svg>
               </label>
             </div>
+            <div className="divider"></div>
             <div className="flex justify-evenly flex-wrap pt-4">
               {productCall.products.map((p) => {
                 return (

@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 export default function Navbar() {
   return (
     <React.Fragment>
-      <nav className="navbar bg-base-100">
+      <nav className="navbar bg-base-100 border-b-2 border-amber-500/70">
         <div className="navbar-start xl:ml-24">
           <div className="dropdown">
             <label tabIndex="0" className="btn btn-ghost btn-circle lg:hidden">

@@ -3,7 +3,6 @@ import { baseUrl, apiPath, getHeaderConfig } from "../utils/axios";
 import { useNavigate } from "react-router-dom";
 import UserContext from "./UserContext";
 import jwtDecode from "jwt-decode";
-import axios from "axios";
 
 const CartContext = createContext({});
 
@@ -11,6 +10,10 @@ export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
   const { userInfo, userTokens } = useContext(UserContext);
   const [cartUpdated, setCartUpdated] = useState(false);
+  const [postCart, setPostCart] = {
+    cameraId: "",
+    quantity: "",
+  };
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -36,7 +39,7 @@ export const CartProvider = ({ children }) => {
     }
   }, [userInfo, userTokens, cartUpdated]);
 
-  const submitCart = async () => {
+  const userCheckout = async () => {
     const stripeSession = await baseUrl.get(
       apiPath.userCheckout,
       getHeaderConfig(userTokens.accessToken)
@@ -44,11 +47,13 @@ export const CartProvider = ({ children }) => {
     window.location.href = stripeSession.data.stripeUrl;
   };
 
+  const addToCart = async () => {};
+
   return (
     <CartContext.Provider
       value={{
         cart: cart,
-        checkout: submitCart,
+        checkout: userCheckout,
       }}
     >
       {children}
