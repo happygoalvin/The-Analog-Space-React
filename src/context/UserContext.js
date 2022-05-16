@@ -26,6 +26,7 @@ export const UserProvider = ({ children }) => {
       const token = JSON.parse(localStorage.getItem("tokens"));
       if (token) {
         updateTokens(token).then(async () => {
+          console.log(token);
           console.log("moved onto retrieve profile");
           setIsLoading(true);
           console.log("Test retrieval");
@@ -131,7 +132,7 @@ export const UserProvider = ({ children }) => {
   };
 
   const userAuth = {
-    getAuth: authState,
+    userTokens: authState,
     logout: logout,
     updateTokens: updateTokens,
     userInfo: userInfo,

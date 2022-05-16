@@ -3,7 +3,7 @@ import ProductContext from "../context/ProductContext";
 import Loader from "../components/Loader";
 import Hero from "../assets/images/hero-image.jpg";
 import { Link } from "react-router-dom";
-import { getManufacturerName } from "../utils/helper";
+import { getManufacturerName, getTypeName } from "../utils/helper";
 
 export default function Landing() {
   const [landingCall] = useContext(ProductContext);
@@ -46,12 +46,18 @@ export default function Landing() {
                     <h2 className="card-title">{newArr.name}</h2>
                     <div className="card-actions justify-start my-1">
                       <div className="badge badge-primary">
-                        {landingCall.manufacturer ? getManufacturerName(
-                          landingCall.manufacturer,
-                          newArr.manufacturer_id
-                        ) : ""}
+                        {landingCall.manufacturer
+                          ? getManufacturerName(
+                              landingCall.manufacturer,
+                              newArr.manufacturer_id
+                            )
+                          : ""}
                       </div>
-                      <div className="badge badge-outline">35mm Camera</div>
+                      <div className="badge badge-outline">
+                        {landingCall.type
+                          ? getTypeName(landingCall.type, newArr.type_id)
+                          : ""}
+                      </div>
                     </div>
                     <p className="prose overflow-y-hidden max-h-28">
                       {newArr.description}

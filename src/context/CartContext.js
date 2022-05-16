@@ -2,27 +2,27 @@ import React, { createContext, useState, useContext, useEffect } from "react";
 import { baseUrl, apiPath, getHeaderConfig } from "../utils/axios";
 import { useNavigate } from "react-router-dom";
 import UserContext from "./UserContext";
+import jwtDecode from "jwt-decode";
+import axios from "axios";
 
 const CartContext = createContext({});
 
 export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
-  const { userInfo, getAuth } = useContext(UserContext);
+  const { userInfo, userTokens } = useContext(UserContext);
   const [cartUpdated, setCartUpdated] = useState(false);
-  const [stripeSession, setStripeSession] = useState(null);
-  const [outOfStock, setOutOfStock] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     async function getCart() {
       const cart = await baseUrl.get(
         apiPath.getAllCartItems,
-        getHeaderConfig(getAuth.accessToken)
+        getHeaderConfig(userTokens.accessToken)
       );
       setCart(cart.data);
     }
 
-    if (userInfo && getAuth) {
+    if (userInfo && userTokens) {
       const cart = getCart();
       if (cart) {
         setCart(cart);
@@ -30,20 +30,30 @@ export const CartProvider = ({ children }) => {
       }
     }
 
-    if (!userInfo || !getAuth) {
-      setCart({});
+    if (!userInfo || !userTokens) {
+      setCart([]);
       setCartUpdated(false);
     }
-  }, [userInfo, getAuth, cartUpdated]);
+  }, [userInfo, userTokens, cartUpdated]);
 
+  const submitCart = async () => {
+    const stripeSession = await baseUrl.get(
+      apiPath.userCheckout,
+      getHeaderConfig(userTokens.accessToken)
+    );
+    window.location.href = stripeSession.data.stripeUrl;
+  };
 
-  useEffect(() => {
-    //   async function checkout() {
-    //       const stripe = await 
-    //   }
-  })
-
-  return <CartContext.Provider value="">{children}</CartContext.Provider>;
+  return (
+    <CartContext.Provider
+      value={{
+        cart: cart,
+        checkout: submitCart,
+      }}
+    >
+      {children}
+    </CartContext.Provider>
+  );
 };
 
 export default CartContext;

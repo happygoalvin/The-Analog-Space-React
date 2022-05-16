@@ -5,7 +5,7 @@ const ProductContext = createContext({});
 
 export const ProductProvider = ({ children }) => {
   const [newArrivalData, setNewArrivalData] = useState([]);
-  const [manufacturer, setManufacturer] = useState();
+  const [manufacturer, setManufacturer] = useState({});
   const [type, setType] = useState({});
   const [productData, setProductData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);

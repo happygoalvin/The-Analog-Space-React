@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Landing from "./pages/Landing";
 import Products from "./pages/Products";
+import ProductDetails from "./pages/ProductDetails";
 import ContactUs from "./pages/ContactUs";
 import Checkout from "./pages/Checkout";
 import Login from "./pages/Login";
@@ -25,6 +26,8 @@ function App() {
               <Route path="/" element={<Landing />} />
               {/* Products Route */}
               <Route path="/products" element={<Products />} />
+              {/* View Product Details Route */}
+              <Route path="/products/:camera_id" element={<ProductDetails />} />
               {/* ContactUs Route */}
               <Route path="/contact-us" element={<ContactUs />} />
               {/* Checkout Route */}
