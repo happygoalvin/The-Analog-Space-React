@@ -20,9 +20,9 @@ export const apiPath = {
   updatePassword: "/users/update",
   deleteAccount: "/users/delete",
   getAllCartItems: "/cart",
-  addCartItem: "/cart/add/:camera_id",
-  removeCartItem: "/cart/remove/:camera_id",
-  updateCartQuantity: "/cart/quantity/update/:camera_id",
+  addCartItem: "/cart/add",
+  removeCartItem: "/cart/remove",
+  updateCartQuantity: "/cart/quantity/update",
   userCheckout: "/checkout",
 };
 

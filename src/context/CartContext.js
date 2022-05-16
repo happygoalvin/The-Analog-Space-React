@@ -1,8 +1,8 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
 import { baseUrl, apiPath, getHeaderConfig } from "../utils/axios";
-import { useNavigate } from "react-router-dom";
 import UserContext from "./UserContext";
 import jwtDecode from "jwt-decode";
+import axios from "axios";
 
 const CartContext = createContext({});
 
@@ -14,7 +14,6 @@ export const CartProvider = ({ children }) => {
     cameraId: "",
     quantity: "",
   };
-  const navigate = useNavigate();
 
   useEffect(() => {
     async function getCart() {
@@ -47,8 +46,20 @@ export const CartProvider = ({ children }) => {
     window.location.href = stripeSession.data.stripeUrl;
   };
 
-  const addToCart = async (cameraId) => {
-    
+  const addToCart = async (cameraId, quantity) => {
+    if (userInfo && userTokens) {
+    await baseUrl.post(apiPath.addCartItem, {
+      id: userInfo.id,
+      camera_id: cameraId,
+      quantity: quantity
+    })
+    setPostCart({
+      cameraId: cameraId,
+      quantity: quantity
+    })
+  } else {
+    console.log("tokens have expired, unable to add to cart")
+  }
   };
 
   return (
@@ -56,6 +67,9 @@ export const CartProvider = ({ children }) => {
       value={{
         cart: cart,
         checkout: userCheckout,
+        addToCart: addToCart,
+        postCart: postCart,
+        setPostCart: setPostCart
       }}
     >
       {children}
