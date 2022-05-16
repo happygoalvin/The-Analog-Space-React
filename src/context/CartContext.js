@@ -47,7 +47,9 @@ export const CartProvider = ({ children }) => {
     window.location.href = stripeSession.data.stripeUrl;
   };
 
-  const addToCart = async () => {};
+  const addToCart = async (cameraId) => {
+    
+  };
 
   return (
     <CartContext.Provider

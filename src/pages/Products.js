@@ -64,12 +64,12 @@ export default function Products() {
                                   productCall.manufacturer,
                                   p.manufacturer_id
                                 )
-                              : ""}
+                              : null}
                           </div>
                           <div className="badge badge-outline">
                             {productCall.type
                               ? getTypeName(productCall.type, p.type_id)
-                              : ""}
+                              : null}
                           </div>
                         </div>
                         <p className="prose overflow-y-hidden max-h-28">
