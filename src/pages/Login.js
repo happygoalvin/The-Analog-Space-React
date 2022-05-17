@@ -3,10 +3,9 @@ import LoginImage from "../assets/images/login-bg.jpg";
 import { baseUrl, apiPath } from "../utils/axios";
 import { regex } from "../validators";
 import { useNavigate, Link } from "react-router-dom";
-import AuthContext from "../context/UserContext";
+import Notify from "simple-notify";
 
 export default function Login() {
-  const userCtx = useContext(AuthContext); 
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -73,19 +72,21 @@ export default function Login() {
         password: password,
       });
 
-      
-      userCtx.updateTokens(response.data)
       localStorage.setItem(
         "tokens",
         JSON.stringify({
           accessToken: response.data.accessToken,
-          refreshToken: response.data.refreshToken
+          refreshToken: response.data.refreshToken,
         })
       );
 
-      console.log(localStorage.getItem("tokens"));
-
-      navigate("/profile");
+      new Notify({
+        status: "success",
+        text: "Login success!",
+        autoclose: true,
+        autotimeout: 1500,
+      });
+      setTimeout(navigate("/profile"), 1500);
     }
   };
 
