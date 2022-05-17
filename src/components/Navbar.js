@@ -1,7 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
+import CartContext from "../context/CartContext";
+import UserContext from "../context/UserContext";
 
 export default function Navbar() {
+  const cartCtx = useContext(CartContext);
+  const userCtx = useContext(UserContext);
+
   return (
     <React.Fragment>
       <nav className="navbar bg-base-100 border-b-2 border-amber-500/70">
@@ -48,19 +53,20 @@ export default function Navbar() {
         </div>
         <div className="navbar-center hidden lg:flex">
           <ul className="menu menu-horizontal p-0">
-            <li className="lg:ml-20 xl:ml-12">
+            <li className="">
               <Link to="/">Home</Link>
             </li>
-            <li className="lg:mx-1 xl:mx-1">
+            <li className="mx-6">
               <Link to="/products">Products</Link>
             </li>
-            <li className="lg:mx-1 xl:mx-1">
+            <li className="">
               <Link to="/contact-us">Contact Us</Link>
             </li>
           </ul>
         </div>
         <div className="navbar-end">
           <div className="dropdown dropdown-end">
+            {!userCtx.loggedOut ? <React.Fragment>
             <label tabIndex="0" className="btn btn-ghost btn-circle">
               <div className="indicator">
                 <svg
@@ -98,6 +104,8 @@ export default function Navbar() {
                 </div>
               </div>
             </div>
+            </React.Fragment> : ""
+        }
           </div>
           <div className="dropdown dropdown-end lg:hidden">
             <label tabIndex="0" className="btn btn-ghost btn-circle avatar">
@@ -107,22 +115,48 @@ export default function Navbar() {
               tabIndex="0"
               className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52 border-2"
             >
-              <li>
-                <Link to="/login">Login</Link>
-              </li>
-              <li>
-                <Link to="/register">Register</Link>
-              </li>
+              {!userCtx.loggedOut ? (
+                <>
+                  <li>
+                    <Link to="/orders">Orders</Link>
+                  </li>
+                  <li>
+                    <Link to="/profile">Profile</Link>
+                  </li>
+                </>
+              ) : (
+                <>
+                  <li>
+                    <Link to="/login">Login</Link>
+                  </li>
+                  <li>
+                    <Link to="/register">Register</Link>
+                  </li>
+                </>
+              )}
             </ul>
           </div>
           <div className="hidden lg:flex xl:ml-4 xl:mr-28">
             <ul className="menu menu-horizontal p-3">
-              <li className="mx-4">
-                <Link to="/login">Login</Link>
-              </li>
-              <li>
-                <Link to="/register">Register</Link>
-              </li>
+              {!userCtx.loggedOut ? (
+                <React.Fragment>
+                  <li>
+                    <Link to="/orders">Orders</Link>
+                  </li>
+                  <li>
+                    <Link to="/profile">Profile</Link>
+                  </li>
+                </React.Fragment>
+              ) : (
+                <React.Fragment>
+                  <li className="mx-4">
+                    <Link to="/login">Login</Link>
+                  </li>
+                  <li>
+                    <Link to="/register">Register</Link>
+                  </li>
+                </React.Fragment>
+              )}
             </ul>
           </div>
         </div>
