@@ -1,12 +1,41 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
+import Notify from "simple-notify";
 import ProductContext from "../context/ProductContext";
+import CartContext from "../context/CartContext";
+import UserContext from "../context/UserContext";
 import Loader from "../components/Loader";
 import Hero from "../assets/images/hero-image.jpg";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { getManufacturerName, getTypeName } from "../utils/helper";
 
 export default function Landing() {
+  const navigate = useNavigate();
   const [landingCall] = useContext(ProductContext);
+  const [quantity, setQuantity] = useState("");
+  const cartCtx = useContext(CartContext);
+  const userCtx = useContext(UserContext);
+  
+  const cartAuth = (cameraId) => {
+    console.log(userCtx.loggedOut)
+    if (userCtx.loggedOut) {
+      new Notify({
+        status: "error",
+        text: "Please login to add to cart",
+        autoclose: true,
+        autotimeout: 1500
+      })
+      setTimeout(navigate("/login"), 1500);
+    } else {
+      setQuantity(1);
+      cartCtx.addToCart(cameraId, quantity);
+      new Notify({
+        status: "success",
+        text: "Added to cart successfully",
+        autoclose: true,
+        autotimeout: 1500
+      })
+    }
+  }
 
   return !landingCall.isLoading ? (
     <React.Fragment>
@@ -66,12 +95,12 @@ export default function Landing() {
                       <p className="justify-start text-2xl font-semibold pt-2">
                         ${newArr.cost / 100}
                       </p>
-                      <Link
-                        to="/checkout"
+                      <button
+                        onClick={() => {cartAuth(newArr.id)}}
                         className="btn btn-secondary hover:shadow-lg hover:shadow-cyan-400/60 transition hover:ease-in-out duration-500 hover:scale-110 hover:translate-y-1"
                       >
                         Add to cart
-                      </Link>
+                      </button>
                     </div>
                   </div>
                 </div>

@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import 'simple-notify/dist/simple-notify.es'
+import "simple-notify/dist/simple-notify.es";
 import Landing from "./pages/Landing";
 import Products from "./pages/Products";
 import ProductDetails from "./pages/ProductDetails";
@@ -18,10 +18,10 @@ import React from "react";
 function App() {
   return (
     <>
-      <UserProvider>
-        <ProductProvider>
-          <CartProvider>
-            <Router>
+      <Router>
+        <UserProvider>
+          <ProductProvider>
+            <CartProvider>
               <Navbar />
               {/* Render Routes */}
               <Routes>
@@ -47,10 +47,10 @@ function App() {
                 {/* Orders Route */}
                 <Route path="/orders" element={<Orders />} />
               </Routes>
-            </Router>
-          </CartProvider>
-        </ProductProvider>
-      </UserProvider>
+            </CartProvider>
+          </ProductProvider>
+        </UserProvider>
+      </Router>
     </>
   );
 }

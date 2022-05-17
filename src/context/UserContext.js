@@ -1,23 +1,51 @@
 import { useState, useEffect, createContext } from "react";
 import { baseUrl, apiPath, getHeaderConfig } from "../utils/axios";
+import Notify from "simple-notify";
+import { useNavigate } from "react-router-dom";
 import jwtDecode from "jwt-decode";
 
 const UserContext = createContext({});
 
 export const UserProvider = ({ children }) => {
+  const navigate = useNavigate();
   const [authState, setAuthState] = useState({
     accessToken: "",
     refreshToken: "",
   });
   const [userInfo, setUserInfo] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const [loggedOut, setLoggedOut] = useState(false);
+  const [tokenUpdated, setTokenUpdated] = useState(false);
 
   // check refreshToken expiry and refresh if needed
   useEffect(() => {
     const token = JSON.parse(localStorage.getItem("tokens"));
+    const tokenExpiryRefresh =
+      jwtDecode(token.refreshToken).exp - 5 * 60 * 1000;
+    const currentUnixTime = Math.round(new Date().getTime() / 1000);
     if (token.refreshToken) {
       updateTokens(token);
+    } else if (currentUnixTime <= tokenExpiryRefresh) {
+      new Notify({
+        status: "info",
+        text: "Session has expired. Please re-login.",
+        effect: "slide",
+      });
+      setAuthState({
+        accessToken: "",
+        refreshToken: "",
+      });
+      localStorage.setItem(
+        "tokens",
+        JSON.stringify({
+          accessToken: "",
+          refreshToken: "",
+        })
+      );
+      setLoggedOut(true);
+      setTimeout(navigate("/login"), 1500);;
     }
+    // eslint-disable-next-line
   }, []);
 
   // check token expiry and retrieve profile info if valid
@@ -26,7 +54,7 @@ export const UserProvider = ({ children }) => {
       const token = JSON.parse(localStorage.getItem("tokens"));
       if (token) {
         updateTokens(token).then(async () => {
-          if (token) {
+          if (tokenUpdated) {
             console.log("moved onto retrieve profile");
             setIsLoading(true);
             console.log("Test retrieval");
@@ -37,18 +65,37 @@ export const UserProvider = ({ children }) => {
             console.log("retrieved profile");
 
             setUserInfo(getUserProfile.data);
+
+            setLoggedOut(false);
             setIsLoading(false);
+            setTokenUpdated(false);
             console.log("profile retrieval end");
           }
         });
       } else {
-        console.log(
-          "refresh token has expired. Please login to retrieve user profile"
+        new Notify({
+          status: "info",
+          text: "Session has expired. Please re-login.",
+          effect: "slide",
+        });
+        setAuthState({
+          accessToken: "",
+          refreshToken: "",
+        });
+        localStorage.setItem(
+          "tokens",
+          JSON.stringify({
+            accessToken: "",
+            refreshToken: "",
+          })
         );
+        setLoggedOut(true);
+        setTimeout(navigate("/login"), 1500);
       }
     };
     getUserInfo();
-  }, []);
+    // eslint-disable-next-line
+  }, [authState.accessToken]);
 
   const updateTokens = async (token) => {
     if (token) {
@@ -79,6 +126,8 @@ export const UserProvider = ({ children }) => {
         console.log("Storing tokens");
 
         setIsLoading(false);
+        setLoggedOut(false);
+        setTokenUpdated(true);
         console.log("Token retrieved");
       } else if (currentUnixTime <= tokenExpiryAccess) {
         console.log("Access token has not expired");
@@ -87,26 +136,12 @@ export const UserProvider = ({ children }) => {
           refreshToken: token.refreshToken,
         });
       }
-    } else {
-      setAuthState({
-        accessToken: "",
-        refreshToken: "",
-      });
-      localStorage.setItem(
-        "tokens",
-        JSON.stringify({
-          accessToken: "",
-          refreshToken: "",
-        })
-      );
-      console.log("refresh token has expired, please re-login");
     }
   };
 
   const logout = async () => {
     const token = JSON.parse(localStorage.getItem("tokens"));
     if (token) {
-      console.log("Logout begin");
       setIsLoading(true);
       await baseUrl.post(apiPath.logout, {
         refreshToken: token.refreshToken,
@@ -126,9 +161,18 @@ export const UserProvider = ({ children }) => {
       });
 
       setIsLoading(false);
-      console.log("Logout successful");
-    } else {
-      console.log("Logout unsuccessful");
+      setLoggedOut(true);
+    }
+
+    if (loggedOut) {
+      new Notify({
+        status: "success",
+        text: "Logout successful",
+        effect: "slide",
+        autoclose: true,
+        autotimeout: 1500,
+      });
+      setTimeout(navigate("/"), 1500);
     }
   };
 
@@ -138,6 +182,7 @@ export const UserProvider = ({ children }) => {
     updateTokens: updateTokens,
     userInfo: userInfo,
     isLoading: isLoading,
+    loggedOut: loggedOut,
   };
 
   return (
