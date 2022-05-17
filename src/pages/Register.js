@@ -3,6 +3,7 @@ import RegisterImage from "../assets/images/registration-bg.jpg";
 import { Link, useNavigate } from "react-router-dom";
 import { baseUrl, apiPath } from "../utils/axios";
 import { regex } from "../validators";
+import Notify from "simple-notify";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -167,7 +168,13 @@ export default function Register() {
     } else {
       const { confirm_password, ...registerData } = registerState;
       await baseUrl.post(apiPath.register, { ...registerData });
-      navigate("/login");
+      new Notify({
+        status: "success",
+        text: "Registration successful! Please login.",
+        autoclose: true,
+        autotimeout: 1500,
+      });
+      setTimeout(navigate("/login"), 1500);
     }
   };
 
