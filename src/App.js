@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import 'simple-notify/dist/simple-notify.es'
 import Landing from "./pages/Landing";
 import Products from "./pages/Products";
 import ProductDetails from "./pages/ProductDetails";

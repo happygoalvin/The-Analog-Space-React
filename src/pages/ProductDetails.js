@@ -2,15 +2,15 @@ import React, { useState, useEffect, useContext } from "react";
 import Loader from "../components/Loader";
 import { baseUrl, apiPath } from "../utils/axios";
 import { useParams } from "react-router-dom";
-import UserContext from "../context/UserContext";
 import CartContext from "../context/CartContext";
 
 export default function ProductDetails() {
   const { camera_id } = useParams();
   const [productDetail, setProductDetail] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const userCtx = useContext(UserContext);
   const cartCtx = useContext(CartContext);
+
+  
 
   useEffect(() => {
     let fetchData = async () => {
@@ -22,7 +22,15 @@ export default function ProductDetails() {
       setIsLoading(false);
     };
     fetchData();
-  }, []);
+  }, [camera_id]);
+
+  useEffect(() => {
+    cartCtx.setPostCart({
+      camera_id: camera_id,
+      quantity: ""
+    }) 
+    // eslint-disable-next-line
+  }, [camera_id])
 
   return !isLoading ? (
     <React.Fragment>
@@ -80,8 +88,8 @@ export default function ProductDetails() {
                 <h1 className="ml-4 font-semibold text-lg pt-6">
                   Specifications
                 </h1>
-                <div className="border/75 sm:ml-2 border-cyan-500/50 sm:h-60 h-72 rounded-box shadow-md shadow-purple-500/80 mt-4">
-                  <div className="sm:px-4 sm:pt-6 px-4 pt-2">
+                <div className="border/75 sm:ml-2 border-cyan-500/50 sm:h-60 h-72 rounded-box shadow-md shadow-purple-500/80 mt-4 mr-10">
+                  <div className="sm:px-4 sm:pt-6 px-6 pt-2 mr-6">
                     {productDetail.camera_iso ? (
                       <p>ISO: {productDetail.camera_iso}</p>
                     ) : null}
@@ -111,15 +119,43 @@ export default function ProductDetails() {
                 <h1 className="ml-4 text-lg font-semibold mt-12">Quantity</h1>
                 <div className="flex justify-between mb-16 mt-6">
                   <div className="pl-3">
-                  <i className="fa-solid fa-minus pr-2"></i>
-                  <input
-                    type="text"
-                    placeholder="0"
-                    className="input input-bordered input-primary w-16 max-w-xs"
-                  />
-                  <i className="fa-solid fa-plus pl-2"></i>
+                    <button
+                      onClick={() => {
+                        cartCtx.minusOne(cartCtx.postCart.quantity, cartCtx.postCart.camera_id);
+                      }}
+                    >
+                      <i className="fa-solid fa-minus pr-2"></i>
+                    </button>
+                    <input
+                      type="text"
+                      placeholder="0"
+                      name="quantity"
+                      value={cartCtx.postCart.quantity}
+                      disabled
+                      onChange={(e) => {
+                        cartCtx.setPostCart({ quantity: e.target.value });
+                      }}
+                      className="input input-bordered input-primary w-16 max-w-xs disabled:border disabled:border-orange-500 disabled:text-slate-300"
+                    />
+                    <button
+                      onClick={() => {
+                        cartCtx.plusOne(cartCtx.postCart.quantity, cartCtx.postCart.camera_id);
+                      }}
+                    >
+                      <i className="fa-solid fa-plus pl-2"></i>
+                    </button>
                   </div>
-                  <button className="btn md:btn-md btn-secondary hover:shadow-lg hover:shadow-cyan-400/60 transition hover:ease-in-out duration-500 hover:scale-110 hover:translate-y-1 font-normal">Add to cart</button>
+                  <button
+                    onClick={() => {
+                      cartCtx.addToCart(
+                        cartCtx.postCart.camera_id,
+                        cartCtx.postCart.quantity
+                      );
+                    }}
+                    className="btn md:btn-md btn-secondary mr-4 hover:shadow-lg hover:shadow-cyan-400/60 transition hover:ease-in-out duration-500 hover:scale-110 hover:translate-y-1 font-normal"
+                  >
+                    Add to cart
+                  </button>
                 </div>
               </div>
             </section>
