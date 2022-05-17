@@ -4,6 +4,7 @@ import { baseUrl, apiPath } from "../utils/axios";
 import { regex } from "../validators";
 import { useNavigate, Link } from "react-router-dom";
 import Notify from "simple-notify";
+import UserContext from "../context/UserContext";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -18,6 +19,7 @@ export default function Login() {
     error: "",
     display: "hidden",
   });
+  const userCtx = useContext(UserContext);
 
   useEffect(() => {
     if (email === "") {
@@ -72,21 +74,22 @@ export default function Login() {
         password: password,
       });
 
-      localStorage.setItem(
-        "tokens",
-        JSON.stringify({
-          accessToken: response.data.accessToken,
-          refreshToken: response.data.refreshToken,
-        })
-      );
-
-      new Notify({
-        status: "success",
-        text: "Login success!",
-        autoclose: true,
-        autotimeout: 1500,
+      userCtx.updateTokens(response.data).then(() => {
+        localStorage.setItem(
+          "tokens",
+          JSON.stringify({
+            accessToken: response.data.accessToken,
+            refreshToken: response.data.refreshToken,
+          })
+        );
+        new Notify({
+          status: "success",
+          text: "Login success!",
+          autoclose: true,
+          autotimeout: 1500,
+        });
+        setTimeout(navigate("/profile"), 1500);
       });
-      setTimeout(navigate("/profile"), 1500);
     }
   };
 
