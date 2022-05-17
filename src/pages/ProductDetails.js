@@ -3,12 +3,14 @@ import Loader from "../components/Loader";
 import { baseUrl, apiPath } from "../utils/axios";
 import { useParams } from "react-router-dom";
 import UserContext from "../context/UserContext";
+import CartContext from "../context/CartContext";
 
 export default function ProductDetails() {
   const { camera_id } = useParams();
   const [productDetail, setProductDetail] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const userCtx = useContext(UserContext);
+  const cartCtx = useContext(CartContext);
 
   useEffect(() => {
     let fetchData = async () => {
@@ -31,7 +33,7 @@ export default function ProductDetails() {
               <img src={productDetail.image_url} alt={productDetail.name} />
             </section>
             <div className="divider lg:divider-horizontal"></div>
-            <section className="grid flex-grow h-screen card bg-base-200 rounded-box place-items-start shadow-xl sm:pt-20 shadow-purple-500 font-mono">
+            <section className="grid flex-grow h-full card bg-base-200 rounded-box place-items-start shadow-xl sm:pt-20 shadow-purple-500 font-mono">
               <div className="sm:pl-8">
                 <h2 className="text-4xl pl-3 font-semibold">
                   {productDetail.name}
@@ -50,7 +52,10 @@ export default function ProductDetails() {
                 <div>
                   {productDetail.classification
                     ? productDetail.classification.map((e) => (
-                        <div key={e.id} className="badge badge-outline badge-primary ml-4 mt-2">
+                        <div
+                          key={e.id}
+                          className="badge badge-outline badge-primary ml-4 mt-2"
+                        >
                           {e.name}
                         </div>
                       ))
@@ -59,7 +64,10 @@ export default function ProductDetails() {
                 <div>
                   {productDetail.film
                     ? productDetail.film.map((e) => (
-                        <div key={e.id} className="badge badge-outline badge-accent ml-4 mt-2">
+                        <div
+                          key={e.id}
+                          className="badge badge-outline badge-accent ml-4 mt-2"
+                        >
                           {e.name}
                         </div>
                       ))
@@ -69,7 +77,9 @@ export default function ProductDetails() {
                 <div className="border/75 rounded-box sm:w-96 max-h-60 overflow-y-scroll px-2 mt-2 sm:ml-2 shadow-md shadow-purple-500/80">
                   <p className="py-2 px-2">{productDetail.description}</p>
                 </div>
-                <h1 className="ml-4 font-semibold text-lg pt-6">Specifications</h1>
+                <h1 className="ml-4 font-semibold text-lg pt-6">
+                  Specifications
+                </h1>
                 <div className="border/75 sm:ml-2 border-cyan-500/50 sm:h-60 h-72 rounded-box shadow-md shadow-purple-500/80 mt-4">
                   <div className="sm:px-4 sm:pt-6 px-4 pt-2">
                     {productDetail.camera_iso ? (
@@ -97,6 +107,19 @@ export default function ProductDetails() {
                       <p>Weight: {productDetail.weight}g</p>
                     ) : null}
                   </div>
+                </div>
+                <h1 className="ml-4 text-lg font-semibold mt-12">Quantity</h1>
+                <div className="flex justify-between mb-16 mt-6">
+                  <div className="pl-3">
+                  <i className="fa-solid fa-minus pr-2"></i>
+                  <input
+                    type="text"
+                    placeholder="0"
+                    className="input input-bordered input-primary w-16 max-w-xs"
+                  />
+                  <i className="fa-solid fa-plus pl-2"></i>
+                  </div>
+                  <button className="btn md:btn-md btn-secondary hover:shadow-lg hover:shadow-cyan-400/60 transition hover:ease-in-out duration-500 hover:scale-110 hover:translate-y-1 font-normal">Add to cart</button>
                 </div>
               </div>
             </section>

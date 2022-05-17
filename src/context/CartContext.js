@@ -10,10 +10,10 @@ export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
   const { userInfo, userTokens } = useContext(UserContext);
   const [cartUpdated, setCartUpdated] = useState(false);
-  const [postCart, setPostCart] = {
+  const [postCart, setPostCart] = useState({
     cameraId: "",
     quantity: "",
-  };
+  });
 
   useEffect(() => {
     async function getCart() {
