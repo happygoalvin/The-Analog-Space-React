@@ -16,6 +16,7 @@
     "react-scripts": "5.0.1",
     "simple-notify": "^0.5.5",
     "stripe": "^9.0.0",
+    "tw-elements": "^1.0.0-alpha12",
     "web-vitals": "^2.1.0"
   },
   "scripts": {

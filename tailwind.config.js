@@ -8,6 +8,7 @@ module.exports = {
     "./src/pages/ProductDetails.js",
     "./src/components/Navbar.js",
     "./src/components/Loader.js",
+    "./node_modules/tw-elements/dist/js/index.min.js"
   ],
   theme: {
     extend: {},
@@ -17,5 +18,6 @@ module.exports = {
     require("@tailwindcss/aspect-ratio"),
     require("@tailwindcss/typography"),
     require("daisyui"),
+    require("tw-elements/dist/plugin")
   ],
 };
