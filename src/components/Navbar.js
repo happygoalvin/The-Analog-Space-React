@@ -67,62 +67,34 @@ export default function Navbar() {
         {!userCtx.loggedOut ? (
           <React.Fragment>
             <div className="navbar-end">
-              <button
-                type="button"
-                className="btn btn-ghost btn-circle"
-                data-bs-toggle="offcanvas"
-                data-bs-target="#offcanvasRight"
-                aria-controls="offcanvasRight"
-              >
-                <div className="indicator">
-                  <svg
-                    className="h-5 w-5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
-                    />
-                  </svg>
-                  {cartCtx.cart ? (
-                    <span className="badge badge-sm badge-primary indicator-item">
-                      {cartCtx.cart.length}
-                    </span>
-                  ) : (
-                    ""
-                  )}
-                </div>
-              </button>
-              <div
-                className="offcanvas offcanvas-end fixed bottom-0 flex flex-col max-w-full bg-white invisible bg-clip-padding shadow-sm outline-none transition duration-300 ease-in-out text-gray-700 top-0 right-0 border-none w-96"
-                tabIndex="-1"
-                id="offcanvasRight"
-                aria-labelledby="offcanvasRightLabel"
-              >
-                <div className="offcanvas-header flex items-center justify-between p-4">
-                  <h5
-                    className="offcanvas-title mb-0 leading-normal font-semibold"
-                    id="offcanvasRightLabel"
-                  >
-                    Offcanvas right
-                  </h5>
-                  <button
-                    type="button"
-                    className="btn-close box-content w-4 h-4 p-2 -my-5 -mr-2 text-black border-none rounded-none opacity-50 focus:shadow-none focus:outline-none focus:opacity-100 hover:text-black hover:opacity-75 hover:no-underline"
-                    data-bs-dismiss="offcanvas"
-                    aria-label="Close"
-                  ></button>
-                </div>
-                <div className="offcanvas-body flex-grow p-4 overflow-y-auto">
-                  ...
-                </div>
+              <div className="dropdown font-mono">
+                <label tabIndex="0" className="btn btn-ghost btn-circle">
+                  <div className="indicator">
+                    <svg
+                      className="h-5 w-5"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
+                      />
+                    </svg>
+                    {cartCtx.cart ? (
+                      <span className="badge badge-sm badge-primary indicator-item">
+                        {cartCtx.cart.length}
+                      </span>
+                    ) : (
+                      ""
+                    )}
+                  </div>
+                </label>
 
                 <div
-                  
+                  tabIndex="0"
                   className="mt-3 card card-compact dropdown-content w-52 bg-base-100 shadow border-2"
                 >
                   <div className="card-body">
@@ -132,20 +104,20 @@ export default function Navbar() {
                     {cartCtx.cart ? (
                       cartCtx.cart.map((info) => {
                         return (
-                          <>
+                          <React.Fragment key={info.id}>
                             <figure className="max-h-80">
                               <img
                                 src={info.camera.image_url}
                                 alt={info.camera.name}
                               />
                             </figure>
-                            <span className="text-accent font-mono">
+                            <span className="text-accent">
                               {info.camera.name}
                             </span>
-                            <button className="btn btn-outline btn-error btn-sm">
-                              Remove from cart
-                            </button>
-                          </>
+                            <span>Qty: {info.quantity}</span>
+                            <p>Subtotal: ${(info.camera.cost * info.quantity) / 100}</p>
+                            <button className="btn btn-outline btn-error btn-sm font-normal ">Remove from cart</button>
+                          </React.Fragment>
                         );
                       })
                     ) : (
@@ -153,7 +125,7 @@ export default function Navbar() {
                     )}
                     <div className="card-actions">
                       <Link
-                        className="btn btn-primary btn-md btn-block hover:shadow-lg hover:shadow-cyan-500/50 transition hover:ease-in-out duration-300"
+                        className="btn btn-outline btn-primary btn-md btn-block hover:shadow-lg hover:shadow-cyan-500/50 transition hover:ease-in-out duration-300"
                         to="/checkout"
                       >
                         View cart

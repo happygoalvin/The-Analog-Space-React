@@ -19,6 +19,12 @@ export const UserProvider = ({ children }) => {
 
   // check refreshToken expiry and refresh if needed
   useEffect(() => {
+    checkRefreshExpiry();
+    getUserInfo();
+    // eslint-disable-next-line
+  }, [tokenUpdated]);
+
+  const checkRefreshExpiry = async () => {
     const token = JSON.parse(localStorage.getItem("tokens"));
     if (token.accessToken && token.refreshToken) {
       const tokenExpiryRefresh =
@@ -44,60 +50,10 @@ export const UserProvider = ({ children }) => {
         setLoggedOut(true);
         setTimeout(navigate("/login"), 1500);
       }
+    } else if (token.refreshToken !== "") {
+      await updateTokens(token);
     }
-    if (token.refreshToken !== "") {
-      updateTokens(token);
-    }
-    // eslint-disable-next-line
-  }, []);
-
-  // check token expiry and retrieve profile info if valid
-  useEffect(() => {
-    const getUserInfo = () => {
-      const token = JSON.parse(localStorage.getItem("tokens"));
-      if (token) {
-        updateTokens(token).then(async () => {
-          if (tokenUpdated) {
-            console.log("moved onto retrieve profile");
-            setIsLoading(true);
-            console.log("Test retrieval");
-            const getUserProfile = await baseUrl.get(
-              apiPath.profile,
-              getHeaderConfig(token.accessToken)
-            );
-            console.log("retrieved profile");
-
-            setUserInfo(getUserProfile.data);
-
-            setLoggedOut(false);
-            setIsLoading(false);
-            setTokenUpdated(false);
-            console.log("profile retrieval end");
-          }
-        });
-      } else {
-        new Notify({
-          status: "info",
-          text: "Session has expired. Please re-login.",
-          effect: "slide",
-        });
-        setAuthState({
-          accessToken: "",
-          refreshToken: "",
-        });
-        localStorage.setItem(
-          "tokens",
-          JSON.stringify({
-            accessToken: "",
-            refreshToken: "",
-          })
-        );
-        setLoggedOut(true);
-        setTimeout(navigate("/login"), 1500);
-      }
-    };
-    // eslint-disable-next-line
-  }, [authState.accessToken]);
+  };
 
   const updateTokens = async (token) => {
     if (token) {
@@ -141,16 +97,64 @@ export const UserProvider = ({ children }) => {
     }
   };
 
+  // check token expiry and retrieve profile info if valid
+  const getUserInfo = async () => {
+    const token = JSON.parse(localStorage.getItem("tokens"));
+    if (token) {
+      await updateTokens(token).then(async () => {
+        if (tokenUpdated) {
+          console.log("moved onto retrieve profile");
+          setIsLoading(true);
+          console.log("Test retrieval");
+          const getUserProfile = await baseUrl.get(
+            apiPath.profile,
+            getHeaderConfig(token.accessToken)
+          );
+          console.log("retrieved profile");
+
+          setUserInfo(getUserProfile.data);
+
+          setLoggedOut(false);
+          setIsLoading(false);
+          setTokenUpdated(true);
+          console.log("profile retrieval end");
+        }
+      });
+    } else {
+      new Notify({
+        status: "info",
+        text: "Session has expired. Please re-login.",
+        effect: "slide",
+      });
+      setAuthState({
+        accessToken: "",
+        refreshToken: "",
+      });
+      localStorage.setItem(
+        "tokens",
+        JSON.stringify({
+          accessToken: "",
+          refreshToken: "",
+        })
+      );
+      getUserInfo();
+      setLoggedOut(true);
+      setTimeout(navigate("/login"), 1500);
+    }
+  };
+
+  
+
   const logout = async () => {
     const token = JSON.parse(localStorage.getItem("tokens"));
     if (token) {
-      console.log("test 1")
+      console.log("test 1");
       setIsLoading(true);
       await baseUrl.post(apiPath.logout, {
         refreshToken: token.refreshToken,
       });
 
-      console.log("test 2")
+      console.log("test 2");
       localStorage.setItem(
         "tokens",
         JSON.stringify({
@@ -159,34 +163,34 @@ export const UserProvider = ({ children }) => {
         })
       );
 
-      console.log("test 3")
+      console.log("test 3");
 
       setAuthState({
         accessToken: "",
         refreshToken: "",
       });
 
-      console.log("test 4")
+      console.log("test 4");
 
       setUserInfo({});
 
-      console.log("test 5")
+      console.log("test 5");
 
       setIsLoading(false);
       setLoggedOut(true);
 
-      console.log("test 6")
+      console.log("test 6");
 
-      console.log("Test 7")
-        new Notify({
-          status: "success",
-          text: "Logout successful",
-          effect: "slide",
-          autoclose: true,
-          autotimeout: 1500,
-        });
-        setTimeout(navigate("/"), 1500);
-        console.log("test 8")
+      console.log("Test 7");
+      new Notify({
+        status: "success",
+        text: "Logout successful",
+        effect: "slide",
+        autoclose: true,
+        autotimeout: 1500,
+      });
+      setTimeout(navigate("/"), 1500);
+      console.log("test 8");
     }
   };
 
