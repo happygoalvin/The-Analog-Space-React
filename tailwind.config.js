@@ -8,7 +8,7 @@ module.exports = {
     "./src/pages/ProductDetails.js",
     "./src/components/Navbar.js",
     "./src/components/Loader.js",
-    "./node_modules/tw-elements/dist/js/index.min.js"
+    ['./src/**/*.{html,js}', './node_modules/tw-elements/dist/js/**/*.js']
   ],
   theme: {
     extend: {},
