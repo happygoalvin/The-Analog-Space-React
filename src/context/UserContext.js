@@ -96,7 +96,6 @@ export const UserProvider = ({ children }) => {
         setTimeout(navigate("/login"), 1500);
       }
     };
-    getUserInfo();
     // eslint-disable-next-line
   }, [authState.accessToken]);
 

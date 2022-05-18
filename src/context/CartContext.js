@@ -25,11 +25,8 @@ export const CartProvider = ({ children }) => {
     }
 
     if (userInfo && userTokens.accessToken) {
-      const cart = getCart();
-      if (cart) {
-        setCart(cart);
-        setCartUpdated(false);
-      }
+      getCart();
+      setCartUpdated(false);
     }
 
     if (!userInfo || !userTokens) {
