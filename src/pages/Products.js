@@ -97,15 +97,43 @@ export default function Products() {
             </div>
             <div className="drawer-side">
               <label htmlFor="my-drawer-4" className="drawer-overlay"></label>
-              <ul className="menu p-4 overflow-y-auto w-80 bg-base-100 text-base-content">
+              <div className="menu p-4 overflow-y-auto overflow-x-hidden w-80 bg-base-100 text-base-content">
                 {/* <!-- Sidebar content here --> */}
-                <li>
-                  <a>Sidebar Item 1</a>
-                </li>
-                <li>
-                  <a>Sidebar Item 2</a>
-                </li>
-              </ul>
+                <h1 className="font-mono text-3xl ml-1 mt-8">Filter By</h1>
+                <div className="mt-2 ml-1">
+                  <label className="label">
+                    <span className="label-text text-md">Name</span>
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Filter by name..."
+                    className="input input-bordered input-primary w-full max-w-xs"
+                  />
+                </div>
+                <div className="sm:flex block">
+                  <div className="mt-2 ml-1">
+                    <label className="label">
+                      <span className="label-text text-md">Min cost</span>
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="Min cost"
+                      className="input input-bordered input-primary w-full sm:w-9/12 max-w-xs"
+                    />
+                  </div>
+                  <div className="mt-2 ml-1">
+                    <label className="label">
+                      <span class="label-text text-md">Max cost</span>
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="Max cost"
+                      class="input input-bordered input-primary w-full sm:w-9/12 max-w-xs"
+                    />
+                  </div>
+                </div>
+                
+              </div>
             </div>
           </div>
         </div>
