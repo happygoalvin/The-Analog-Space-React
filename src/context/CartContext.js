@@ -16,24 +16,31 @@ export const CartProvider = ({ children }) => {
   });
 
   useEffect(() => {
+    getCart();
+  }, [userInfo, userTokens, cartUpdated, postCart.quantity]);
+
+  const getCart = async () => {
     async function getCart() {
+      console.log("get Cart start");
       const cart = await baseUrl.get(
         apiPath.getAllCartItems,
         getHeaderConfig(userTokens.accessToken)
       );
-      setCart(cart.data);
+      typeof cart.data === {} ? setCart([cart.data]) : setCart([cart.data]);
     }
 
     if (userInfo && userTokens.accessToken) {
+      console.log("activating get cart");
       getCart();
-      setCartUpdated(false);
+      setCartUpdated(true);
     }
 
     if (!userInfo || !userTokens) {
+      console.log("unable to get cart");
       setCart([]);
       setCartUpdated(false);
     }
-  }, [userInfo, userTokens, cartUpdated]);
+  };
 
   const userCheckout = async () => {
     const stripeSession = await baseUrl.get(
@@ -61,7 +68,7 @@ export const CartProvider = ({ children }) => {
       setCartUpdated(true);
       new Notify({
         status: "success",
-        text: "Successfully added to cart",
+        text: "Added to cart successfully",
         autoclose: true,
         autotimeout: 1500,
       });
@@ -77,13 +84,17 @@ export const CartProvider = ({ children }) => {
     }
   };
 
-  const minusOne = (quantity, cameraId) => {
+  const minusOne = (cameraId, quantity) => {
     if (quantity <= 0 || quantity === "") {
       new Notify({
         status: "warning",
         text: "Quantity cannot be lesser than 0",
         autoclose: true,
         autotimeout: 800,
+      });
+      setPostCart({
+        camera_id: cameraId,
+        quantity: "",
       });
     } else {
       new Notify({
@@ -101,7 +112,7 @@ export const CartProvider = ({ children }) => {
     }
   };
 
-  const plusOne = (quantity, cameraId) => {
+  const plusOne = (cameraId, quantity) => {
     if (quantity === "" || quantity || quantity === 0) {
       new Notify({
         status: "success",

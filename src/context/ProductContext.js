@@ -7,46 +7,44 @@ export const ProductProvider = ({ children }) => {
   const [newArrivalData, setNewArrivalData] = useState([]);
   const [manufacturer, setManufacturer] = useState({});
   const [type, setType] = useState({});
+  const [classification, setClassification] = useState({});
+  const [film, setFilm] = useState({});
   const [productData, setProductData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [filterState, setFilterState] = useState({
+    name: "",
+    min_cost: "",
+    max_cost: "",
+    type_id: "",
+    manufacturer_id: "",
+    classification_id: "",
+    film_id: "",
+  });
+
+  const fetchData = async () => {
+    setIsLoading(true);
+    let fetchProducts = await baseUrl.get(apiPath.products);
+    console.log(fetchProducts.data);
+    setProductData(fetchProducts.data);
+
+    let fetchManufacturer = await baseUrl.get(apiPath.manufacturer);
+    setManufacturer(fetchManufacturer.data);
+
+    let fetchTypes = await baseUrl.get(apiPath.type);
+    setType(fetchTypes.data);
+
+    let fetchClassifications = await baseUrl.get(apiPath.classification);
+    setClassification(fetchClassifications.data);
+
+    let fetchFilms = await baseUrl.get(apiPath.film);
+    setFilm(fetchFilms.data);
+
+    let fetchNewArrival = await baseUrl.get(apiPath.newArrivals);
+    setNewArrivalData(fetchNewArrival.data);
+    setIsLoading(false);
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      let fetchProducts = await baseUrl.get(apiPath.products);
-      setProductData(fetchProducts.data);
-      setIsLoading(false);
-    };
-    fetchData();
-  }, []);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      let fetchManufacturer = await baseUrl.get(apiPath.manufacturer);
-      setManufacturer(fetchManufacturer.data);
-      setIsLoading(false);
-    };
-    fetchData();
-  }, []);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      let fetchTypes = await baseUrl.get(apiPath.type);
-      setType(fetchTypes.data);
-      setIsLoading(false);
-    };
-    fetchData();
-  }, []);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      let fetchNewArrival = await baseUrl.get(apiPath.newArrivals);
-      setIsLoading(true);
-      setNewArrivalData(fetchNewArrival.data);
-      setIsLoading(false);
-    };
     fetchData();
   }, []);
 
@@ -61,7 +59,11 @@ export const ProductProvider = ({ children }) => {
     products: productData,
     manufacturer: manufacturer,
     type: type,
+    classification: classification,
+    film: film,
     isLoading: isLoading,
+    filterState: filterState,
+    setFilterState: setFilterState,
   };
 
   return (

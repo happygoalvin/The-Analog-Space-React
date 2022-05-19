@@ -10,8 +10,6 @@ export default function ProductDetails() {
   const [isLoading, setIsLoading] = useState(false);
   const cartCtx = useContext(CartContext);
 
-  
-
   useEffect(() => {
     let fetchData = async () => {
       setIsLoading(true);
@@ -27,10 +25,10 @@ export default function ProductDetails() {
   useEffect(() => {
     cartCtx.setPostCart({
       camera_id: camera_id,
-      quantity: ""
-    }) 
+      quantity: "",
+    });
     // eslint-disable-next-line
-  }, [camera_id])
+  }, [camera_id]);
 
   return !isLoading ? (
     <React.Fragment>
@@ -121,7 +119,10 @@ export default function ProductDetails() {
                   <div className="pl-3">
                     <button
                       onClick={() => {
-                        cartCtx.minusOne(cartCtx.postCart.quantity, cartCtx.postCart.camera_id);
+                        cartCtx.minusOne(
+                          camera_id,
+                          cartCtx.postCart.quantity
+                        );
                       }}
                     >
                       <i className="fa-solid fa-minus pr-2"></i>
@@ -139,7 +140,10 @@ export default function ProductDetails() {
                     />
                     <button
                       onClick={() => {
-                        cartCtx.plusOne(cartCtx.postCart.quantity, cartCtx.postCart.camera_id);
+                        cartCtx.plusOne(
+                          camera_id,
+                          cartCtx.postCart.quantity
+                        );
                       }}
                     >
                       <i className="fa-solid fa-plus pl-2"></i>

@@ -31,4 +31,3 @@ export const getHeaderConfig = (token) => {
     headers: { Authorization: `Bearer ${token}` },
   };
 };
-

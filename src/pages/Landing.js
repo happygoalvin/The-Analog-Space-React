@@ -11,31 +11,24 @@ import { getManufacturerName, getTypeName } from "../utils/helper";
 export default function Landing() {
   const navigate = useNavigate();
   const [landingCall] = useContext(ProductContext);
-  const [quantity, setQuantity] = useState("");
   const cartCtx = useContext(CartContext);
   const userCtx = useContext(UserContext);
-  
-  const cartAuth = (cameraId) => {
-    console.log(userCtx.loggedOut)
+
+  const cartAuth = (cameraId, quantity) => {
+    console.log(userCtx.loggedOut);
     if (userCtx.loggedOut) {
       new Notify({
         status: "error",
         text: "Please login to add to cart",
         autoclose: true,
-        autotimeout: 1500
-      })
+        autotimeout: 1500,
+      });
       setTimeout(navigate("/login"), 1500);
     } else {
-      setQuantity(1);
-      cartCtx.addToCart(cameraId, quantity);
-      new Notify({
-        status: "success",
-        text: "Added to cart successfully",
-        autoclose: true,
-        autotimeout: 1500
-      })
+      let selectedQuantity = quantity + 1
+      cartCtx.addToCart(cameraId, selectedQuantity);
     }
-  }
+  };
 
   return !landingCall.isLoading ? (
     <React.Fragment>
@@ -96,7 +89,9 @@ export default function Landing() {
                         ${newArr.cost / 100}
                       </p>
                       <button
-                        onClick={() => {cartAuth(newArr.id)}}
+                        onClick={() => {
+                          cartAuth(newArr.id, cartCtx.postCart.quantity);
+                        }}
                         className="btn btn-secondary hover:shadow-lg hover:shadow-cyan-400/60 transition hover:ease-in-out duration-500 hover:scale-110 hover:translate-y-1"
                       >
                         Add to cart
