@@ -102,7 +102,7 @@ export default function Navbar() {
                       {cartCtx.cart.length} Items
                     </span>
                     {cartCtx.cart ? (
-                      cartCtx.cart.map((info) => {
+                      cartCtx?.cart?.map((info) => {
                         return (
                           <React.Fragment key={info.id}>
                             <figure className="max-h-80">

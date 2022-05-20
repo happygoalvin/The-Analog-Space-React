@@ -17,7 +17,8 @@ export const CartProvider = ({ children }) => {
 
   useEffect(() => {
     getCart();
-  }, [userInfo, userTokens, cartUpdated, postCart.quantity]);
+    // eslint-disable-next-line
+  }, [userInfo, userTokens, cartUpdated, postCart]);
 
   const getCart = async () => {
     async function getCart() {
@@ -26,7 +27,7 @@ export const CartProvider = ({ children }) => {
         apiPath.getAllCartItems,
         getHeaderConfig(userTokens.accessToken)
       );
-      typeof cart.data === {} ? setCart([cart.data]) : setCart([cart.data]);
+      setCart(cart.data);
     }
 
     if (userInfo && userTokens.accessToken) {
@@ -61,11 +62,8 @@ export const CartProvider = ({ children }) => {
         },
         getHeaderConfig(userTokens.accessToken)
       );
-      setPostCart({
-        cameraId: cameraId,
-        quantity: quantity,
-      });
-      setCartUpdated(true);
+
+      setCartUpdated(false);
       new Notify({
         status: "success",
         text: "Added to cart successfully",
@@ -97,14 +95,7 @@ export const CartProvider = ({ children }) => {
         quantity: "",
       });
     } else {
-      new Notify({
-        status: "success",
-        text: "Quantity removed",
-        speed: 100,
-        autoclose: true,
-        autotimeout: 800,
-      });
-      let selected = quantity - 1;
+      let selected = parseInt(quantity - 1);
       setPostCart({
         camera_id: cameraId,
         quantity: selected,

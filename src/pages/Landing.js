@@ -1,8 +1,6 @@
 import React, { useContext, useState } from "react";
-import Notify from "simple-notify";
+// import Notify from "simple-notify";
 import ProductContext from "../context/ProductContext";
-import CartContext from "../context/CartContext";
-import UserContext from "../context/UserContext";
 import Loader from "../components/Loader";
 import Hero from "../assets/images/hero-image.jpg";
 import { Link, useNavigate } from "react-router-dom";
@@ -11,24 +9,24 @@ import { getManufacturerName, getTypeName } from "../utils/helper";
 export default function Landing() {
   const navigate = useNavigate();
   const [landingCall] = useContext(ProductContext);
-  const cartCtx = useContext(CartContext);
-  const userCtx = useContext(UserContext);
 
-  const cartAuth = (cameraId, quantity) => {
-    console.log(userCtx.loggedOut);
-    if (userCtx.loggedOut) {
-      new Notify({
-        status: "error",
-        text: "Please login to add to cart",
-        autoclose: true,
-        autotimeout: 1500,
-      });
-      setTimeout(navigate("/login"), 1500);
-    } else {
-      let selectedQuantity = quantity + 1
-      cartCtx.addToCart(cameraId, selectedQuantity);
-    }
-  };
+  // cartAuth used for add to cart function in future
+  // implementations
+  // const cartAuth = (cameraId, quantity) => {
+  //   console.log(userCtx.loggedOut);
+  //   if (userCtx.loggedOut) {
+  //     new Notify({
+  //       status: "error",
+  //       text: "Please login to add to cart",
+  //       autoclose: true,
+  //       autotimeout: 1500,
+  //     });
+  //     setTimeout(navigate("/login"), 1500);
+  //   } else {
+  //     let selectedQuantity = quantity + 1;
+  //     cartCtx.addToCart(cameraId, selectedQuantity);
+  //   }
+  // };
 
   return !landingCall.isLoading ? (
     <React.Fragment>
@@ -88,14 +86,18 @@ export default function Landing() {
                       <p className="justify-start text-2xl font-semibold pt-2">
                         ${newArr.cost / 100}
                       </p>
-                      <button
+                      <button onClick={(() => navigate(`/products/${newArr.id}`))} className="btn btn-secondary hover:shadow-lg hover:shadow-cyan-400/60 transition hover:ease-in-out duration-500 hover:scale-110 hover:translate-y-1">
+                        View Product
+                      </button>
+                      {/* REVISITING AFTER SUBMISSIONS */}
+                      {/* <button
                         onClick={() => {
                           cartAuth(newArr.id, cartCtx.postCart.quantity);
                         }}
                         className="btn btn-secondary hover:shadow-lg hover:shadow-cyan-400/60 transition hover:ease-in-out duration-500 hover:scale-110 hover:translate-y-1"
                       >
                         Add to cart
-                      </button>
+                      </button> */}
                     </div>
                   </div>
                 </div>

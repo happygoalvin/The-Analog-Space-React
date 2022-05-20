@@ -14,7 +14,7 @@ export default function Products() {
 
   return !productCall.isLoading ? (
     <React.Fragment>
-      <div className="container mx-auto">
+      <div className="container mx-auto overflow-x-hidden">
         <div className="bg-base-100">
           <div className="drawer drawer-end">
             <input id="my-drawer-4" type="checkbox" className="drawer-toggle" />
@@ -99,40 +99,133 @@ export default function Products() {
               <label htmlFor="my-drawer-4" className="drawer-overlay"></label>
               <div className="menu p-4 overflow-y-auto overflow-x-hidden w-80 bg-base-100 text-base-content">
                 {/* <!-- Sidebar content here --> */}
-                <h1 className="font-mono text-3xl ml-1 mt-8">Filter By</h1>
-                <div className="mt-2 ml-1">
-                  <label className="label">
-                    <span className="label-text text-md">Name</span>
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="Filter by name..."
-                    className="input input-bordered input-primary w-full max-w-xs"
-                  />
-                </div>
-                <div className="sm:flex block">
+                <div className="overflow-y-scroll">
+                  <h1 className="font-mono text-2xl ml-1 mt-8">Filter By</h1>
                   <div className="mt-2 ml-1">
                     <label className="label">
-                      <span className="label-text text-md">Min cost</span>
+                      <span className="label-text text-md">Name</span>
                     </label>
                     <input
                       type="text"
-                      placeholder="Min cost"
-                      className="input input-bordered input-primary w-full sm:w-9/12 max-w-xs"
+                      placeholder="Filter by name..."
+                      className="input input-bordered input-primary w-full max-w-xs"
                     />
                   </div>
-                  <div className="mt-2 ml-1">
-                    <label className="label">
-                      <span class="label-text text-md">Max cost</span>
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="Max cost"
-                      class="input input-bordered input-primary w-full sm:w-9/12 max-w-xs"
-                    />
+                  <div className="sm:flex block">
+                    <div className="mt-2 ml-1">
+                      <label className="label">
+                        <span className="label-text text-md">Min cost</span>
+                      </label>
+                      <input
+                        type="text"
+                        placeholder="Min cost"
+                        className="input input-bordered input-primary w-full sm:w-9/12 max-w-xs"
+                      />
+                    </div>
+                    <div className="mt-2 ml-1">
+                      <label className="label">
+                        <span className="label-text text-md">Max cost</span>
+                      </label>
+                      <input
+                        type="text"
+                        placeholder="Max cost"
+                        className="input input-bordered input-primary w-full sm:w-9/12 max-w-xs"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="collapse collapse-plus mt-6">
+                    <input type="checkbox" className="peer" />
+                    <div className="collapse-title rounded-box border border-primary text-base-content">
+                      Type
+                    </div>
+                    <div className="collapse-content bg-outline text-primary-content peer-checked:bg-base-100 peer-checked:text-base-content ">
+                      <div class="form-control">
+                        <label class="label cursor-pointer">
+                          <span class="label-text">Red pill</span>
+                          <input
+                            type="radio"
+                            name="radio-6"
+                            class="radio radio-sm checked:bg-red-500 my-2"
+                            checked
+                          />
+                        </label>
+                        <label class="label cursor-pointer">
+                          <span class="label-text">blue pill</span>
+                          <input
+                            type="radio"
+                            name="radio-6"
+                            class="radio radio-sm checked:bg-blue-500"
+                            checked
+                          />
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="collapse collapse-plus transition ease-in-out duration-300 mt-6">
+                    <input type="checkbox" className="peer" />
+                    <div className="collapse-title bg-base-100 border-primary border rounded-box text-base-content">
+                      Brand
+                    </div>
+                    <div className="collapse-content text-primary-content peer-checked:bg-base-100 peer-checked:text-base-content">
+                      <div class="form-control">
+                        <label class="label cursor-pointer">
+                          <span class="label-text">Red pill</span>
+                          <input
+                            type="radio"
+                            name="radio-6"
+                            class="radio radio-sm checked:bg-red-500 my-2"
+                            checked
+                          />
+                        </label>
+                        <label class="label cursor-pointer">
+                          <span class="label-text">blue pill</span>
+                          <input
+                            type="radio"
+                            name="radio-6"
+                            class="radio radio-sm checked:bg-blue-500"
+                            checked
+                          />
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="collapse collapse-plus mt-6">
+                    <input type="checkbox" className="peer" />
+                    <div className="collapse-title border border-primary bg-base-100 text-base-content rounded-box">
+                      Classifications
+                    </div>
+                    <div className="collapse-content text-primary-content peer-checked:bg-base-100 peer-checked:text-base-content">
+                      <div class="form-control">
+                        <label class="cursor-pointer label">
+                          <span class="label-text">Remember me</span>
+                          <input
+                            type="checkbox"
+                            class="checkbox checkbox-sm checkbox-primary"
+                          />
+                        </label>
+                      </div>
+                    </div>
+
+                    <div className="collapse collapse-plus mt-6">
+                      <input type="checkbox" className="peer" />
+                      <div className="collapse-title bg-base-100 border border-primary text-base-content rounded-box">
+                        Films
+                      </div>
+                      <div className="collapse-content text-primary-content peer-checked:bg-base-100 peer-checked:text-base-content">
+                        <div class="form-control">
+                          <label class="cursor-pointer label">
+                            <span class="label-text">Remember me</span>
+                            <input
+                              type="checkbox"
+                              class="checkbox checkbox-sm checkbox-primary"
+                            />
+                          </label>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
-                
               </div>
             </div>
           </div>
