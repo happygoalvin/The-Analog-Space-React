@@ -2,7 +2,6 @@ import React, { createContext, useState, useContext, useEffect } from "react";
 import { baseUrl, apiPath, getHeaderConfig } from "../utils/axios";
 import UserContext from "./UserContext";
 import Notify from "simple-notify";
-import jwtDecode from "jwt-decode";
 
 const CartContext = createContext({});
 
@@ -53,7 +52,6 @@ export const CartProvider = ({ children }) => {
 
   const addToCart = async (cameraId, quantity) => {
     if (userInfo && userTokens.accessToken) {
-      console.log(userTokens.accessToken);
       await baseUrl.post(
         apiPath.addCartItem,
         {
@@ -88,7 +86,7 @@ export const CartProvider = ({ children }) => {
         status: "warning",
         text: "Quantity cannot be lesser than 0",
         autoclose: true,
-        autotimeout: 800,
+        autotimeout: 1500,
       });
       setPostCart({
         camera_id: cameraId,
@@ -97,7 +95,7 @@ export const CartProvider = ({ children }) => {
     } else {
       let selected = parseInt(quantity - 1);
       setPostCart({
-        camera_id: cameraId,
+        camera_id: parseInt(cameraId),
         quantity: selected,
       });
     }
@@ -105,17 +103,34 @@ export const CartProvider = ({ children }) => {
 
   const plusOne = (cameraId, quantity) => {
     if (quantity === "" || quantity || quantity === 0) {
-      new Notify({
-        status: "success",
-        text: "Quantity added",
-        speed: 100,
-        autoclose: true,
-        autotimeout: 800,
-      });
       let selected = parseInt(quantity + 1);
       setPostCart({
-        camera_id: cameraId,
+        camera_id: parseInt(cameraId),
         quantity: selected,
+      });
+    }
+  };
+
+  const removeFromCart = async (cameraId) => {
+    if (userInfo && userTokens.accessToken) {
+      console.log(cameraId);
+      console.log(userTokens.accessToken);
+      await baseUrl.delete(apiPath.removeCartItem, {
+        headers: {
+          Authorization: `Bearer ${userTokens.accessToken}`,
+        },
+        data: {
+          camera_id: cameraId,
+        },
+      });
+
+      setCartUpdated(false);
+      new Notify({
+        status: "success",
+        text: "Removed from cart successfully",
+        speed: 300,
+        autoclose: true,
+        autotimeout: 1500,
       });
     }
   };
@@ -130,6 +145,7 @@ export const CartProvider = ({ children }) => {
         setPostCart: setPostCart,
         minusOne: minusOne,
         plusOne: plusOne,
+        removeFromCart: removeFromCart,
       }}
     >
       {children}

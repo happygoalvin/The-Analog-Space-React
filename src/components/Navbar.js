@@ -1,9 +1,10 @@
 import React, { useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import CartContext from "../context/CartContext";
 import UserContext from "../context/UserContext";
 
 export default function Navbar() {
+  const navigate = useNavigate();
   const cartCtx = useContext(CartContext);
   const userCtx = useContext(UserContext);
 
@@ -47,6 +48,7 @@ export default function Navbar() {
             <img
               src={require("../assets/images/brand-logo2.png")}
               className="w-6 h-6 sm:w-12 sm:h-12 mx-2 btn-circle"
+              alt="Shuttle on a camera"
             ></img>
             The Analog Space
           </Link>
@@ -67,7 +69,7 @@ export default function Navbar() {
         {!userCtx.loggedOut ? (
           <React.Fragment>
             <div className="navbar-end">
-              <div className="dropdown font-mono">
+              <div className="dropdown dropdown-left hidden sm:inline-block font-mono">
                 <label tabIndex="0" className="btn btn-ghost btn-circle">
                   <div className="indicator">
                     <svg
@@ -115,8 +117,18 @@ export default function Navbar() {
                               {info.camera.name}
                             </span>
                             <span>Qty: {info.quantity}</span>
-                            <p>Subtotal: ${(info.camera.cost * info.quantity) / 100}</p>
-                            <button className="btn btn-outline btn-error btn-sm font-normal ">Remove from cart</button>
+                            <p>
+                              Subtotal: $
+                              {(info.camera.cost * info.quantity) / 100}
+                            </p>
+                            <button
+                              onClick={() => {
+                                cartCtx.removeFromCart(info.camera_id);
+                              }}
+                              className="btn btn-outline btn-error btn-sm font-normal "
+                            >
+                              Remove from cart
+                            </button>
                           </React.Fragment>
                         );
                       })
@@ -134,6 +146,34 @@ export default function Navbar() {
                   </div>
                 </div>
               </div>
+              <button
+                onClick={() => navigate(`/checkout`)}
+                tabIndex="0"
+                className="btn btn-ghost sm:hidden btn-circle"
+              >
+                <div className="indicator">
+                  <svg
+                    className="h-5 w-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
+                    />
+                  </svg>
+                  {cartCtx.cart ? (
+                    <span className="badge badge-sm badge-primary indicator-item">
+                      {cartCtx.cart.length}
+                    </span>
+                  ) : (
+                    ""
+                  )}
+                </div>
+              </button>
               <div className="dropdown dropdown-end lg:hidden">
                 <label tabIndex="0" className="btn btn-ghost btn-circle avatar">
                   <i className="fa-solid fa-circle-user fa-2xl"></i>
