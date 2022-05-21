@@ -1,8 +1,9 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import ProductContext from "../context/ProductContext";
 import Loader from "../components/Loader";
 import { useNavigate } from "react-router-dom";
 import { getManufacturerName, getTypeName } from "../utils/helper";
+import { apiPath, baseUrl } from "../utils/axios";
 
 export default function Products() {
   const navigate = useNavigate();
@@ -12,7 +13,50 @@ export default function Products() {
     navigate(`/products/${p}`);
   };
 
-  
+  useEffect(() => {
+    searchFilter();
+    // eslint-disable-next-line
+  }, [productCall.filterState]);
+
+  const searchFilter = async () => {
+    const response = await baseUrl.post(apiPath.products, {
+      name: productCall.filterState.name,
+      min_cost: productCall.filterState.min_cost,
+      max_cost: productCall.filterState.max_cost,
+      type_id: productCall.filterState.type_id,
+      manufacturer_id: productCall.filterState.manufacturer_id,
+      classification_id: productCall.filterState.classification_id.toString(),
+      film_id: productCall.filterState.film_id.toString(),
+    });
+    productCall.setProductData(response.data);
+  };
+
+  const updateCheckboxes = (evt) => {
+    if (productCall.filterState[evt.target.name].includes(evt.target.value)) {
+      // case 1: the evt.target.value is already in the array
+      let indexToRemove = productCall.filterState[evt.target.name].findIndex(
+        (v) => {
+          return v === evt.target.value;
+        }
+      );
+      let cloned = productCall.filterState[evt.target.name].slice();
+      cloned.splice(indexToRemove, 1);
+      productCall.setFilterState({
+        ...productCall.filterState,
+        [evt.target.name]: cloned,
+      });
+    } else {
+      // case 2: the evt.target.value is not in the array
+      // it means: add evt.target.value to array
+
+      let clone = productCall.filterState[evt.target.name].slice();
+      clone.push(evt.target.value);
+      productCall.setFilterState({
+        ...productCall.filterState,
+        [evt.target.name]: clone,
+      });
+    }
+  };
 
   return !productCall.isLoading ? (
     <React.Fragment>
@@ -102,7 +146,15 @@ export default function Products() {
               <div className="menu p-4 overflow-y-auto overflow-x-hidden w-80 bg-base-100 text-base-content">
                 {/* <!-- Sidebar content here --> */}
                 <div className="overflow-y-scroll">
-                  <h1 className="font-mono text-2xl ml-1 mt-8">Filter By</h1>
+                  {/* FILTER BY HEADER START */}
+                  <div className="flex justify-between ml-1 mt-8">
+                    <h1 className="font-mono text-2xl">Filter By</h1>
+                    <i
+                      onClick={() => productCall.fetchProducts()}
+                      className="fa-solid fa-arrows-rotate fa-lg mt-4 cursor-pointer"
+                    ></i>
+                  </div>
+                  {/* FORM NAME START */}
                   <div className="mt-2 ml-1">
                     <label className="label">
                       <span className="label-text text-md">Name</span>
@@ -116,12 +168,16 @@ export default function Products() {
                           ...productCall.filterState,
                           name: e.target.value,
                         });
+                        searchFilter();
                       }}
                       placeholder="Filter by name..."
                       className="input input-bordered input-primary w-full max-w-xs"
                     />
                   </div>
+                  {/* FORM NAME END */}
+                  {/* FORM MIN COST MAX COST START */}
                   <div className="sm:flex block">
+                    {/* MIN COST */}
                     <div className="mt-2 ml-1">
                       <label className="label">
                         <span className="label-text text-md">Min cost</span>
@@ -136,10 +192,12 @@ export default function Products() {
                             ...productCall.filterState,
                             min_cost: e.target.value,
                           });
+                          searchFilter();
                         }}
                         className="input input-bordered input-primary w-full sm:w-9/12 max-w-xs"
                       />
                     </div>
+                    {/* MAX COST */}
                     <div className="mt-2 ml-1">
                       <label className="label">
                         <span className="label-text text-md">Max cost</span>
@@ -154,105 +212,175 @@ export default function Products() {
                             ...productCall.filterState,
                             max_cost: e.target.value,
                           });
+                          searchFilter();
                         }}
                         className="input input-bordered input-primary w-full sm:w-9/12 max-w-xs"
                       />
                     </div>
                   </div>
+                  {/* FORM MIN COST MAX COST END */}
 
-                  {/* <div className="collapse collapse-plus mt-6">
+                  {/* FORM TYPE START */}
+                  <div className="collapse collapse-plus mt-6">
                     <input type="checkbox" className="peer" />
                     <div className="collapse-title rounded-box border border-primary text-base-content">
                       Type
                     </div>
-                    {productCall.type.length > 0 ? productCall.type.map((type) =>
-                      <div className="collapse-content bg-outline text-primary-content peer-checked:bg-base-100 peer-checked:text-base-content ">
-                        <div className="form-control">
-                          <label className="label cursor-pointer">
-                            <span className="label-text">{type[1]}</span>
-                            <input
-                              type="checkbox"
-                              name="type"
-                              value={type[0]}
-                              onChange={(e) => {
-                                productCall.setFilterState({
-                                  ...productCall.filterState,
-                                  type_id: e.target.value
-                                })
-                              }}
-                              className="checkbox checkbox-sm checked:bg-red-500 my-2"
-                              
-                            />
-                          </label>
-                        </div>
-                      </div>
-                    ) : ""}
+                    <div className="collapse-content bg-outline text-primary-content peer-checked:bg-base-100 peer-checked:text-base-content ">
+                      {productCall.type.length > 0
+                        ? productCall.typeOption.map((type) => {
+                            return (
+                              <React.Fragment key={type.value}>
+                                <div className="form-control mt-1">
+                                  <label className="label cursor-pointer">
+                                    <span className="label-text">
+                                      {type.label}
+                                    </span>
+                                    <input
+                                      type="radio"
+                                      name="type_id"
+                                      check={
+                                        productCall.filterState.type_id !==
+                                        undefined
+                                          ? productCall.filterState.type_id ===
+                                            type.value
+                                          : undefined
+                                      }
+                                      value={type.value}
+                                      onChange={(e) => {
+                                        productCall.setFilterState({
+                                          ...productCall.filterState,
+                                          type_id: e.target.value,
+                                        });
+                                        searchFilter();
+                                      }}
+                                      className="radio radio-sm checked:bg-primary"
+                                    />
+                                  </label>
+                                </div>
+                              </React.Fragment>
+                            );
+                          })
+                        : ""}
+                    </div>
                   </div>
+                  {/* FORM TYPE END */}
+                  {/* FORM MANUFACTURER START */}
                   <div className="collapse collapse-plus transition ease-in-out duration-300 mt-6">
                     <input type="checkbox" className="peer" />
                     <div className="collapse-title bg-base-100 border-primary border rounded-box text-base-content">
                       Brand
                     </div>
                     <div className="collapse-content text-primary-content peer-checked:bg-base-100 peer-checked:text-base-content">
-                      <div className="form-control">
-                        <label className="label cursor-pointer">
-                          <span className="label-text">Red pill</span>
-                          <input
-                            type="radio"
-                            name="radio-6"
-                            className="radio radio-sm checked:bg-red-500 my-2"
-                            checked
-                          />
-                        </label>
-                        <label className="label cursor-pointer">
-                          <span className="label-text">blue pill</span>
-                          <input
-                            type="radio"
-                            name="radio-6"
-                            className="radio radio-sm checked:bg-blue-500"
-                            checked
-                          />
-                        </label>
-                      </div>
+                      {productCall.manufacturer.length > 0
+                        ? productCall.manufacturerOption?.map(
+                            (manufacturer) => {
+                              return (
+                                <React.Fragment key={manufacturer.value}>
+                                  <div className="form-control mt-1">
+                                    <label className="label cursor-pointer">
+                                      <span className="label-text">
+                                        {manufacturer.label}
+                                      </span>
+                                      <input
+                                        type="radio"
+                                        name="manufacturer_id"
+                                        check={
+                                          productCall.filterState
+                                            .manufacturer_id !== undefined
+                                            ? productCall.filterState
+                                                .manufacturer_id ===
+                                              manufacturer.value
+                                            : undefined
+                                        }
+                                        value={manufacturer.value}
+                                        onChange={(e) => {
+                                          productCall.setFilterState({
+                                            ...productCall.filterState,
+                                            manufacturer_id: e.target.value,
+                                          });
+                                          searchFilter();
+                                        }}
+                                        className="radio radio-sm checked:bg-primary"
+                                      />
+                                    </label>
+                                  </div>
+                                </React.Fragment>
+                              );
+                            }
+                          )
+                        : ""}
                     </div>
                   </div>
+                  {/* FORM MANUFACTURER END */}
+
+                  {/* FORM CLASSIFICATIONS START */}
                   <div className="collapse collapse-plus mt-6">
                     <input type="checkbox" className="peer" />
                     <div className="collapse-title border border-primary bg-base-100 text-base-content rounded-box">
                       Classifications
                     </div>
                     <div className="collapse-content text-primary-content peer-checked:bg-base-100 peer-checked:text-base-content">
-                      <div className="form-control">
-                        <label className="cursor-pointer label">
-                          <span className="label-text">Remember me</span>
-                          <input
-                            type="checkbox"
-                            className="checkbox checkbox-sm checkbox-primary"
-                          />
-                        </label>
-                      </div>
+                      {productCall.classificationOption.length > 0
+                        ? productCall.classificationOption.map((c) => {
+                            return (
+                              <React.Fragment key={c.value}>
+                                <div className="form-control mt-1">
+                                  <label className="cursor-pointer label">
+                                    <span className="label-text">
+                                      {c.label}
+                                    </span>
+                                    <input
+                                      type="checkbox"
+                                      name="classification_id"
+                                      value={c.value}
+                                      onChange={(e) => {
+                                        updateCheckboxes(e);
+                                      }}
+                                      className="checkbox checkbox-sm checkbox-primary"
+                                    />
+                                  </label>
+                                </div>
+                              </React.Fragment>
+                            );
+                          })
+                        : ""}
                     </div>
+                    {/* FORM CLASSIFICATIONS END */}
 
+                    {/* FORM FILMS START */}
                     <div className="collapse collapse-plus mt-6">
                       <input type="checkbox" className="peer" />
                       <div className="collapse-title bg-base-100 border border-primary text-base-content rounded-box">
                         Films
                       </div>
                       <div className="collapse-content text-primary-content peer-checked:bg-base-100 peer-checked:text-base-content">
-                        <div className="form-control">
-                          <label className="cursor-pointer label">
-                            <span className="label-text">Remember me</span>
-                            <input
-                              type="checkbox"
-                              className="checkbox checkbox-sm checkbox-primary"
-                            />
-                          </label>
-                        </div>
+                        {productCall.filmOption.length > 0
+                          ? productCall.filmOption.map((film) => {
+                              return (
+                                <React.Fragment key={film.value}>
+                                  <div className="form-control">
+                                    <label className="cursor-pointer label">
+                                      <span className="label-text">
+                                        {film.label}
+                                      </span>
+                                      <input
+                                        type="checkbox"
+                                        name="film_id"
+                                        value={film.value}
+                                        onChange={(e) => updateCheckboxes(e)}
+                                        className="checkbox checkbox-sm checkbox-primary"
+                                      />
+                                    </label>
+                                  </div>
+                                </React.Fragment>
+                              );
+                            })
+                          : ""}
                       </div>
                     </div>
-                  </div> */}
-                  {/* FILTER BY TYPE, MANUFACTURER, CLASSIFICATION, FILM END */}
-
+                    {/* FORM FILMS END */}
+                  </div>
                 </div>
               </div>
             </div>

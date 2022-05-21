@@ -5,10 +5,10 @@ const ProductContext = createContext({});
 
 export const ProductProvider = ({ children }) => {
   const [newArrivalData, setNewArrivalData] = useState([]);
-  const [manufacturer, setManufacturer] = useState({});
-  const [type, setType] = useState({});
-  const [classification, setClassification] = useState({});
-  const [film, setFilm] = useState({});
+  const [manufacturer, setManufacturer] = useState([]);
+  const [type, setType] = useState([]);
+  const [classification, setClassification] = useState([]);
+  const [film, setFilm] = useState([]);
   const [productData, setProductData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [filterState, setFilterState] = useState({
@@ -17,8 +17,8 @@ export const ProductProvider = ({ children }) => {
     max_cost: "",
     type_id: "",
     manufacturer_id: "",
-    classification_id: "",
-    film_id: "",
+    classification_id: [],
+    film_id: [],
   });
 
   const fetchData = async () => {
@@ -44,6 +44,34 @@ export const ProductProvider = ({ children }) => {
     setIsLoading(false);
   };
 
+  const typeOption = type.map((t) => {
+    return {
+      label: t[1],
+      value: t[0],
+    };
+  });
+
+  const manufacturerOption = manufacturer.map((m) => {
+    return {
+      label: m[1],
+      value: m[0],
+    };
+  });
+
+  const classificationOption = classification.map((c) => {
+    return {
+      value: c[0],
+      label: c[1],
+    };
+  });
+
+  const filmOption = film.map((f) => {
+    return {
+      value: f[0],
+      label: f[1],
+    };
+  });
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -57,13 +85,19 @@ export const ProductProvider = ({ children }) => {
 
   const productCall = {
     products: productData,
+    setProductData: setProductData,
     manufacturer: manufacturer,
     type: type,
+    manufacturerOption: manufacturerOption,
+    typeOption: typeOption,
     classification: classification,
+    classificationOption: classificationOption,
     film: film,
+    filmOption: filmOption,
     isLoading: isLoading,
     filterState: filterState,
     setFilterState: setFilterState,
+    fetchProducts: fetchData,
   };
 
   return (
