@@ -12,6 +12,8 @@ export default function Products() {
     navigate(`/products/${p}`);
   };
 
+  
+
   return !productCall.isLoading ? (
     <React.Fragment>
       <div className="container mx-auto overflow-x-hidden">
@@ -107,6 +109,14 @@ export default function Products() {
                     </label>
                     <input
                       type="text"
+                      name="name"
+                      value={productCall.filterState.name}
+                      onChange={(e) => {
+                        productCall.setFilterState({
+                          ...productCall.filterState,
+                          name: e.target.value,
+                        });
+                      }}
                       placeholder="Filter by name..."
                       className="input input-bordered input-primary w-full max-w-xs"
                     />
@@ -119,6 +129,14 @@ export default function Products() {
                       <input
                         type="text"
                         placeholder="Min cost"
+                        name="min_cost"
+                        value={productCall.filterState.min_cost}
+                        onChange={(e) => {
+                          productCall.setFilterState({
+                            ...productCall.filterState,
+                            min_cost: e.target.value,
+                          });
+                        }}
                         className="input input-bordered input-primary w-full sm:w-9/12 max-w-xs"
                       />
                     </div>
@@ -129,38 +147,46 @@ export default function Products() {
                       <input
                         type="text"
                         placeholder="Max cost"
+                        name="max_cost"
+                        value={productCall.filterState.max_cost}
+                        onChange={(e) => {
+                          productCall.setFilterState({
+                            ...productCall.filterState,
+                            max_cost: e.target.value,
+                          });
+                        }}
                         className="input input-bordered input-primary w-full sm:w-9/12 max-w-xs"
                       />
                     </div>
                   </div>
 
-                  <div className="collapse collapse-plus mt-6">
+                  {/* <div className="collapse collapse-plus mt-6">
                     <input type="checkbox" className="peer" />
                     <div className="collapse-title rounded-box border border-primary text-base-content">
                       Type
                     </div>
-                    <div className="collapse-content bg-outline text-primary-content peer-checked:bg-base-100 peer-checked:text-base-content ">
-                      <div class="form-control">
-                        <label class="label cursor-pointer">
-                          <span class="label-text">Red pill</span>
-                          <input
-                            type="radio"
-                            name="radio-6"
-                            class="radio radio-sm checked:bg-red-500 my-2"
-                            checked
-                          />
-                        </label>
-                        <label class="label cursor-pointer">
-                          <span class="label-text">blue pill</span>
-                          <input
-                            type="radio"
-                            name="radio-6"
-                            class="radio radio-sm checked:bg-blue-500"
-                            checked
-                          />
-                        </label>
+                    {productCall.type.length > 0 ? productCall.type.map((type) =>
+                      <div className="collapse-content bg-outline text-primary-content peer-checked:bg-base-100 peer-checked:text-base-content ">
+                        <div className="form-control">
+                          <label className="label cursor-pointer">
+                            <span className="label-text">{type[1]}</span>
+                            <input
+                              type="checkbox"
+                              name="type"
+                              value={type[0]}
+                              onChange={(e) => {
+                                productCall.setFilterState({
+                                  ...productCall.filterState,
+                                  type_id: e.target.value
+                                })
+                              }}
+                              className="checkbox checkbox-sm checked:bg-red-500 my-2"
+                              
+                            />
+                          </label>
+                        </div>
                       </div>
-                    </div>
+                    ) : ""}
                   </div>
                   <div className="collapse collapse-plus transition ease-in-out duration-300 mt-6">
                     <input type="checkbox" className="peer" />
@@ -168,22 +194,22 @@ export default function Products() {
                       Brand
                     </div>
                     <div className="collapse-content text-primary-content peer-checked:bg-base-100 peer-checked:text-base-content">
-                      <div class="form-control">
-                        <label class="label cursor-pointer">
-                          <span class="label-text">Red pill</span>
+                      <div className="form-control">
+                        <label className="label cursor-pointer">
+                          <span className="label-text">Red pill</span>
                           <input
                             type="radio"
                             name="radio-6"
-                            class="radio radio-sm checked:bg-red-500 my-2"
+                            className="radio radio-sm checked:bg-red-500 my-2"
                             checked
                           />
                         </label>
-                        <label class="label cursor-pointer">
-                          <span class="label-text">blue pill</span>
+                        <label className="label cursor-pointer">
+                          <span className="label-text">blue pill</span>
                           <input
                             type="radio"
                             name="radio-6"
-                            class="radio radio-sm checked:bg-blue-500"
+                            className="radio radio-sm checked:bg-blue-500"
                             checked
                           />
                         </label>
@@ -196,12 +222,12 @@ export default function Products() {
                       Classifications
                     </div>
                     <div className="collapse-content text-primary-content peer-checked:bg-base-100 peer-checked:text-base-content">
-                      <div class="form-control">
-                        <label class="cursor-pointer label">
-                          <span class="label-text">Remember me</span>
+                      <div className="form-control">
+                        <label className="cursor-pointer label">
+                          <span className="label-text">Remember me</span>
                           <input
                             type="checkbox"
-                            class="checkbox checkbox-sm checkbox-primary"
+                            className="checkbox checkbox-sm checkbox-primary"
                           />
                         </label>
                       </div>
@@ -213,18 +239,20 @@ export default function Products() {
                         Films
                       </div>
                       <div className="collapse-content text-primary-content peer-checked:bg-base-100 peer-checked:text-base-content">
-                        <div class="form-control">
-                          <label class="cursor-pointer label">
-                            <span class="label-text">Remember me</span>
+                        <div className="form-control">
+                          <label className="cursor-pointer label">
+                            <span className="label-text">Remember me</span>
                             <input
                               type="checkbox"
-                              class="checkbox checkbox-sm checkbox-primary"
+                              className="checkbox checkbox-sm checkbox-primary"
                             />
                           </label>
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </div> */}
+                  {/* FILTER BY TYPE, MANUFACTURER, CLASSIFICATION, FILM END */}
+
                 </div>
               </div>
             </div>
