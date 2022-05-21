@@ -22,7 +22,8 @@ export const apiPath = {
   getAllCartItems: "/cart",
   addCartItem: "/cart/add",
   removeCartItem: "/cart/remove",
-  updateCartQuantity: "/cart/quantity/update",
+  addCartQuantity: "/cart/quantity/update",
+  minusCartQuantity: "/cart/quantity/remove",
   userCheckout: "/checkout",
 };
 

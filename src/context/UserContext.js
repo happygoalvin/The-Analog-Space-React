@@ -143,8 +143,6 @@ export const UserProvider = ({ children }) => {
     }
   };
 
-  
-
   const logout = async () => {
     const token = JSON.parse(localStorage.getItem("tokens"));
     if (token) {
