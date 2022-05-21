@@ -44,6 +44,22 @@ export const ProductProvider = ({ children }) => {
     setIsLoading(false);
   };
 
+  const resetFilter = async () => {
+    let fetchProducts = await baseUrl.get(apiPath.products);
+    console.log(fetchProducts.data);
+    setProductData(fetchProducts.data);
+
+    setFilterState({
+      name: "",
+      min_cost: "",
+      max_cost: "",
+      type_id: "",
+      manufacturer_id: "",
+      classification_id: [],
+      film_id: [],
+    });
+  };
+
   const typeOption = type.map((t) => {
     return {
       label: t[1],
@@ -97,7 +113,7 @@ export const ProductProvider = ({ children }) => {
     isLoading: isLoading,
     filterState: filterState,
     setFilterState: setFilterState,
-    fetchProducts: fetchData,
+    resetFilter: resetFilter,
   };
 
   return (

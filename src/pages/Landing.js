@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 // import Notify from "simple-notify";
 import ProductContext from "../context/ProductContext";
 import Loader from "../components/Loader";
@@ -86,7 +86,10 @@ export default function Landing() {
                       <p className="justify-start text-2xl font-semibold pt-2">
                         ${newArr.cost / 100}
                       </p>
-                      <button onClick={(() => navigate(`/products/${newArr.id}`))} className="btn btn-secondary hover:shadow-lg hover:shadow-cyan-400/60 transition hover:ease-in-out duration-500 hover:scale-110 hover:translate-y-1">
+                      <button
+                        onClick={() => navigate(`/products/${newArr.id}`)}
+                        className="btn btn-secondary hover:shadow-lg hover:shadow-cyan-400/60 transition hover:ease-in-out duration-500 hover:scale-110 hover:translate-y-1"
+                      >
                         View Product
                       </button>
                       {/* REVISITING AFTER SUBMISSIONS */}

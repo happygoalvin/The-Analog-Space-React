@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import ProductContext from "../context/ProductContext";
 import Loader from "../components/Loader";
 import { useNavigate } from "react-router-dom";
@@ -12,11 +12,6 @@ export default function Products() {
   const viewDetails = (p) => {
     navigate(`/products/${p}`);
   };
-
-  useEffect(() => {
-    searchFilter();
-    // eslint-disable-next-line
-  }, [productCall.filterState]);
 
   const searchFilter = async () => {
     const response = await baseUrl.post(apiPath.products, {
@@ -145,12 +140,12 @@ export default function Products() {
               <label htmlFor="my-drawer-4" className="drawer-overlay"></label>
               <div className="menu p-4 overflow-y-auto overflow-x-hidden w-80 bg-base-100 text-base-content">
                 {/* <!-- Sidebar content here --> */}
-                <div className="overflow-y-scroll">
+                <div className="overflow-y-auto">
                   {/* FILTER BY HEADER START */}
                   <div className="flex justify-between ml-1 mt-8">
                     <h1 className="font-mono text-2xl">Filter By</h1>
                     <i
-                      onClick={() => productCall.fetchProducts()}
+                      onClick={() => productCall.resetFilter()}
                       className="fa-solid fa-arrows-rotate fa-lg mt-4 cursor-pointer"
                     ></i>
                   </div>
@@ -168,7 +163,6 @@ export default function Products() {
                           ...productCall.filterState,
                           name: e.target.value,
                         });
-                        searchFilter();
                       }}
                       placeholder="Filter by name..."
                       className="input input-bordered input-primary w-full max-w-xs"
@@ -192,7 +186,6 @@ export default function Products() {
                             ...productCall.filterState,
                             min_cost: e.target.value,
                           });
-                          searchFilter();
                         }}
                         className="input input-bordered input-primary w-full sm:w-9/12 max-w-xs"
                       />
@@ -212,7 +205,6 @@ export default function Products() {
                             ...productCall.filterState,
                             max_cost: e.target.value,
                           });
-                          searchFilter();
                         }}
                         className="input input-bordered input-primary w-full sm:w-9/12 max-w-xs"
                       />
@@ -252,7 +244,6 @@ export default function Products() {
                                           ...productCall.filterState,
                                           type_id: e.target.value,
                                         });
-                                        searchFilter();
                                       }}
                                       className="radio radio-sm checked:bg-primary"
                                     />
@@ -299,7 +290,6 @@ export default function Products() {
                                             ...productCall.filterState,
                                             manufacturer_id: e.target.value,
                                           });
-                                          searchFilter();
                                         }}
                                         className="radio radio-sm checked:bg-primary"
                                       />
@@ -380,8 +370,13 @@ export default function Products() {
                       </div>
                     </div>
                     {/* FORM FILMS END */}
+                    
                   </div>
+                  
                 </div>
+                <button onClick={() => {
+                  searchFilter()
+                }} className="btn btn-primary hover:shadow-lg hover:shadow-cyan-400/60 transition hover:ease-in-out duration-500 hover:scale-110 hover:translate-y-1 mt-3">Filter</button>
               </div>
             </div>
           </div>
