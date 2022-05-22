@@ -14,3 +14,11 @@ export const getTypeName = (state, typeId) => {
   }
 };
 
+export const getQuantity = (state, orderId) => {
+  for (let i = 0; i < state.length; i++) {
+    if (state[i][2] === orderId) {
+      console.log("test")
+      return <p>state[i][3]</p>
+    }
+  }
+};

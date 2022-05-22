@@ -7,9 +7,10 @@ module.exports = {
     "./src/pages/Products.js",
     "./src/pages/ProductDetails.js",
     "./src/pages/Checkout.js",
+    "./src/pages/OrderDetails.js",
     "./src/components/Navbar.js",
     "./src/components/Order.js",
-    "./src/components/Loader.js"
+    "./src/components/Loader.js",
   ],
   theme: {
     extend: {},

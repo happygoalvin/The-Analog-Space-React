@@ -25,7 +25,7 @@ export const apiPath = {
   addCartQuantity: "/cart/quantity/update",
   minusCartQuantity: "/cart/quantity/remove",
   userCheckout: "/checkout",
-  getOrders: "/orders",
+  getOrders: "/orders/",
 };
 
 export const getHeaderConfig = (token) => {
