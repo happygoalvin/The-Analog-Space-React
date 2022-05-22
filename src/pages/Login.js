@@ -88,7 +88,7 @@ export default function Login() {
           autoclose: true,
           autotimeout: 1500,
         });
-        setTimeout(navigate("/profile"), 1500);
+        setTimeout(navigate("/"), 1500);
       });
     }
   };

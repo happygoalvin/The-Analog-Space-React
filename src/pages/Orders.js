@@ -8,7 +8,7 @@ export default function Orders() {
 
   return (
     <React.Fragment>
-      <section className="container mx-auto">
+      <section className="container mx-auto h-screen">
         <div className="flex justify-center mt-12">
           <h1 className="text-4xl font-mono">Order History</h1>
         </div>

@@ -11,6 +11,7 @@ module.exports = {
     "./src/components/Navbar.js",
     "./src/components/Order.js",
     "./src/components/Loader.js",
+    "./src/components/Footer.js"
   ],
   theme: {
     extend: {},

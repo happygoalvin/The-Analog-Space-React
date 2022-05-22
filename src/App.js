@@ -3,14 +3,15 @@ import "simple-notify/dist/simple-notify.es";
 import Landing from "./pages/Landing";
 import Products from "./pages/Products";
 import ProductDetails from "./pages/ProductDetails";
-import ContactUs from "./pages/ContactUs";
+// import ContactUs from "./pages/ContactUs";
 import Checkout from "./pages/Checkout";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import Profile from "./pages/Profile";
+// import Profile from "./pages/Profile";
 import Orders from "./pages/Orders";
 import OrderDetails from "./pages/OrderDetails";
 import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
 import { ProductProvider } from "./context/ProductContext";
 import { UserProvider } from "./context/UserContext";
 import { CartProvider } from "./context/CartContext";
@@ -38,7 +39,7 @@ function App() {
                     element={<ProductDetails />}
                   />
                   {/* ContactUs Route */}
-                  <Route path="/contact-us" element={<ContactUs />} />
+                  {/* <Route path="/contact-us" element={<ContactUs />} /> */}
                   {/* Checkout Route */}
                   <Route path="/checkout" element={<Checkout />} />
                   {/* Login Route */}
@@ -46,12 +47,13 @@ function App() {
                   {/* Register Route */}
                   <Route path="/register" element={<Register />} />
                   {/* Profile Route */}
-                  <Route path="/profile" element={<Profile />} />
+                  {/* <Route path="/profile" element={<Profile />} /> */}
                   {/* Orders Route */}
                   <Route path="/orders" element={<Orders />} />
                   {/* Order Details Route */}
                   <Route path="/orders/:order_id" element={<OrderDetails />} />
                 </Routes>
+                <Footer />
               </OrderProvider>
             </CartProvider>
           </ProductProvider>

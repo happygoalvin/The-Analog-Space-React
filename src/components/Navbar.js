@@ -39,9 +39,9 @@ export default function Navbar() {
               <li>
                 <Link to="/products">Products</Link>
               </li>
-              <li>
+              {/* <li>
                 <Link to="/contact-us">Contact Us</Link>
-              </li>
+              </li> */}
             </ul>
           </div>
           <Link className="btn btn-ghost normal-case text-sm md:text-xl" to="/">
@@ -61,9 +61,9 @@ export default function Navbar() {
             <li className="mx-6">
               <Link to="/products">Products</Link>
             </li>
-            <li className="">
+            {/* <li className="">
               <Link to="/contact-us">Contact Us</Link>
-            </li>
+            </li> */}
           </ul>
         </div>
         {!userCtx.loggedOut ? (
@@ -185,9 +185,9 @@ export default function Navbar() {
                   <li>
                     <Link to="/orders">Orders</Link>
                   </li>
-                  <li>
+                  {/* <li>
                     <Link to="/profile">Profile</Link>
-                  </li>
+                  </li> */}
                   <li>
                     <button
                       onClick={() => {
@@ -204,9 +204,9 @@ export default function Navbar() {
                   <li>
                     <Link to="/orders">Orders</Link>
                   </li>
-                  <li>
+                  {/* <li>
                     <Link to="/profile">Profile</Link>
-                  </li>
+                  </li> */}
                   <li>
                     <button onClick={() => userCtx.logout()}>Logout</button>
                   </li>
